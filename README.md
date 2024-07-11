@@ -1,20 +1,12 @@
-# Root: The Woodland Companion
+# Arcs: The Void Companion
 
-A helper app for Root: a Game of Woodland Might and Right.
+A helper app for Arcs: Collapse & Conflict in the Reach.
 
 All rights for images and other assets go to Leder Games.
 
-Resources:
-- [BoardGameGeek FAQ](https://boardgamegeek.com/thread/2038847/official-faq-and-guide-reading-rules)
-- [FAQ Document](https://docs.google.com/document/d/1usz2D3BCurx2nKEOtDseCwNaFL7vOArvGHdrIt_KPio/edit)
-
-## Want to Contribute Rules/FAQ?
+## Want to Contribute Rules?
 
 Here are where those files are located:
 
-* [The Rules](https://github.com/seiyria/root/blob/master/src/assets/i18n/rules/)
-* [The FAQ](https://github.com/seiyria/root/blob/master/src/assets/i18n/faq/)
+* [The Rules](https://github.com/Vagabottos/arcs/tree/master/src/assets/i18n/rules)
 
-## Want to Contribute to the Discord Bot?
-
-You can find the Discord bot [over here](https://github.com/seiyria/rootbot).
