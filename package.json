@@ -14,8 +14,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "watchrules": "nodemon -e .yml node scripts/prepare.js",
-    "prepare": "node scripts/prepare",
-    "validaterules": "node scripts/compare-rules"
+    "prepare": "node scripts/prepare"
   },
   "private": true,
   "dependencies": {
