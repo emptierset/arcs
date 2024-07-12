@@ -12,12 +12,3 @@ ruleFiles.forEach(file => {
 
 });
 
-const faqFiles = fs.readdirSync('src/assets/i18n/faq');
-faqFiles.forEach(file => {
-
-  const fileL = fs.readFileSync(`src/assets/i18n/faq/${file}`, 'UTF-8');
-  const json = yaml.safeLoad(fileL);
-  
-  fs.writeFileSync(`src/assets/i18n/faq/${file.split('.')[0]}.json`, JSON.stringify(json));
-
-});
