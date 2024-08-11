@@ -107,12 +107,6 @@ export class RulesService {
           )}" class="rule-link">${chosenString}</a>`;
         }
 
-        if (type === 'faction') {
-          return `
-            <a href="#${this.indexRuleHash[extra]}">
-              <img src="assets/inicon/${type}-${subtype}.png" class="inline-icon" />
-            </a>
-          `;
         }
 
         return `<img src="assets/inicon/${type}-${subtype}.png" class="inline-icon" />`;
