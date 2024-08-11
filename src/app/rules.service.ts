@@ -64,8 +64,8 @@ export class RulesService {
 
     // custom inline image formatter
     renderer.codespan = (text: string) => {
-      if (text.includes(':')) {
-        const [type, subtype, extra] = text.split(':');
+      if (text.includes('::')) {
+        const [type, subtype] = text.split('::');
 
         if (type === 'rule') {
           const [major, minor, child, desc, descDesc] = subtype.split('.');
@@ -107,6 +107,119 @@ export class RulesService {
           )}" class="rule-link">${chosenString}</a>`;
         }
 
+        if (type === 'rule-relative') {
+          const [major, minor, child, desc, descDesc] = subtype.split('$');
+          let chosenNode = null;
+          let chosenIdx = -1;
+          let chosenString = '';
+          let derivedRuleSubtype = '';
+
+          const format = (str: string) => {
+            if (!str) {
+              return;
+            }
+            return marked(str, { renderer });
+          };
+
+          if (major) {
+            let found = false;
+            for (const [idx, candidateNode] of allRules.entries()) {
+              if (major === format(candidateNode.name)) {
+                chosenNode = candidateNode;
+                chosenIdx = idx;
+                found = true;
+                break;
+              }
+            }
+            if (!found) {
+              return `<span class="error">Not Found: ${subtype}</span>`;
+            }
+            chosenString += `${chosenIdx + 1}`;
+            derivedRuleSubtype += `${chosenIdx + 1}`;
+          }
+
+          if (minor && chosenNode && chosenNode.children) {
+            let found = false;
+            for (const [idx, candidateNode] of chosenNode.children.entries()) {
+              console.log(minor, format(candidateNode.name));
+              if (minor === format(candidateNode.name)) {
+                chosenNode = candidateNode;
+                chosenIdx = idx;
+                found = true;
+                break;
+              }
+            }
+            if (!found) {
+              return `<span class="error">Not Found: ${subtype}</span>`;
+            }
+            chosenString += `.${chosenIdx + 1}`;
+            derivedRuleSubtype += `.${chosenIdx + 1}`;
+          }
+
+          if (child && chosenNode && chosenNode.children) {
+            let found = false;
+            for (const [idx, candidateNode] of chosenNode.children.entries()) {
+              if (child === format(candidateNode.name)) {
+                chosenNode = candidateNode;
+                chosenIdx = idx;
+                found = true;
+                break;
+              }
+            }
+            if (!found) {
+              return `<span class="error">Not Found: ${subtype}</span>`;
+            }
+            chosenString += `.${chosenIdx + 1}`;
+            derivedRuleSubtype += `.${chosenIdx + 1}`;
+          }
+
+          if (desc && chosenNode && chosenNode.children) {
+            let found = false;
+            for (const [idx, candidateNode] of chosenNode.children.entries()) {
+              if (desc === format(candidateNode.name)) {
+                chosenNode = candidateNode;
+                chosenIdx = idx;
+                found = true;
+                break;
+              }
+            }
+            if (!found) {
+              return `<span class="error">Not Found: ${subtype}</span>`;
+            }
+            chosenString += `.${toRoman(chosenIdx + 1)}`;
+            derivedRuleSubtype += `.${chosenIdx + 1}`;
+          }
+
+          if (descDesc && chosenNode && chosenNode.children) {
+            let found = false;
+            for (const [idx, candidateNode] of chosenNode.children.entries()) {
+              if (descDesc === format(candidateNode.name)) {
+                chosenNode = candidateNode;
+                chosenIdx = idx;
+                found = true;
+                break;
+              }
+            }
+            if (!found) {
+              return `<span class="error">Not Found: ${subtype}</span>`;
+            }
+            chosenString += `${String.fromCharCode(chosenIdx + 1 + 96)}`;
+            derivedRuleSubtype += `.${chosenIdx + 1}`;
+          }
+
+          if (!chosenNode) {
+            return `<span class="error">Not Found: ${subtype}</span>`;
+          }
+
+          // For some reason, linking to top-level rules requires a trailing period.
+          if (!derivedRuleSubtype.includes('.')) {
+              derivedRuleSubtype += '.';
+          }
+
+          return `<a href="#${this.slugTitle(
+            derivedRuleSubtype,
+            chosenNode.name
+          )}" class="rule-link">${chosenString}</a>`;
         }
 
         return `<img src="assets/inicon/${type}-${subtype}.png" class="inline-icon" />`;
