@@ -87,7 +87,7 @@ a[href] > img {
     padding-left: 20px;
   }
 
-  li {
+  > li {
     position: relative;
 
     counter-increment: romanizedsub;
@@ -116,7 +116,7 @@ a[href] > img {
     padding-left: 20px;
   }
 
-  li {
+  > li {
     position: relative;
 
     counter-increment: alphabetasub;
