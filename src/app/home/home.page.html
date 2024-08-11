@@ -76,8 +76,8 @@
               [innerHTML]="grandchildRule.text | highlight:searchTerm:grandchildRule.index"></span>
 
             <!-- please never go deeper -->
-            <ol class="romanized-list list" *ngIf="grandchildRule.subchildren">
-              <li *ngFor="let descRule of grandchildRule.subchildren; let descIndex = index"
+            <ol class="romanized-list list" *ngIf="grandchildRule.children">
+              <li *ngFor="let descRule of grandchildRule.children; let descIndex = index"
                 [class.ion-hide]="!isVisible([majorIndex + 1, minorIndex + 1, childIndex + 1, descIndex + 1])">
                 <a class="name child" [id]="rulesService.indexesToRules[descRule.index]"
                   [innerHTML]="descRule.formattedName | highlight:searchTerm:descRule.index"
@@ -86,8 +86,8 @@
                 <span class="text child" [innerHTML]="descRule.text | highlight:searchTerm:descRule.index"></span>
 
                 <!-- I said please :( -->
-                <ol class="alphabeta-list list sublist" *ngIf="descRule.subchildren">
-                  <li *ngFor="let descDescRule of descRule.subchildren; let descDescIndex = index"
+                <ol class="alphabeta-list list sublist" *ngIf="descRule.children">
+                  <li *ngFor="let descDescRule of descRule.children; let descDescIndex = index"
                     [class.ion-hide]="!isVisible([majorIndex + 1, minorIndex + 1, childIndex + 1, descIndex + 1, descDescIndex + 1])">
                     <a class="name child" [id]="rulesService.indexesToRules[descDescRule.index]"
                       [innerHTML]="descDescRule.formattedName | highlight:searchTerm:descDescRule.index"

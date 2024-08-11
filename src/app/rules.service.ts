@@ -87,14 +87,14 @@ export class RulesService {
             chosenNode = chosenNode.children[+child - 1];
           }
 
-          if (desc && chosenNode && chosenNode.subchildren) {
+          if (desc && chosenNode && chosenNode.children) {
             chosenString += `.${toRoman(desc)}`;
-            chosenNode = chosenNode.subchildren[+desc - 1];
+            chosenNode = chosenNode.children[+desc - 1];
           }
 
-          if (descDesc && chosenNode && chosenNode.subchildren) {
+          if (descDesc && chosenNode && chosenNode.children) {
             chosenString += `${String.fromCharCode(+descDesc + 96)}`;
-            chosenNode = chosenNode.subchildren[+descDesc - 1];
+            chosenNode = chosenNode.children[+descDesc - 1];
           }
 
           if (!chosenNode) {
@@ -283,7 +283,7 @@ export class RulesService {
             grandchildRule.plainName || grandchildRule.name
           );
 
-          (grandchildRule.subchildren || []).forEach(
+          (grandchildRule.children || []).forEach(
             (descendantNode, descRuleIndex) => {
               descendantNode.formattedName = format(descendantNode.name);
               descendantNode.text = format(descendantNode.text);
@@ -298,7 +298,7 @@ export class RulesService {
                 descendantNode.plainName || descendantNode.name
               );
 
-              (descendantNode.subchildren || []).forEach(
+              (descendantNode.children || []).forEach(
                 (descDescendantNode, descDescRuleIndex) => {
                   descDescendantNode.formattedName = format(
                     descDescendantNode.name
