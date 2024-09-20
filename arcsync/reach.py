@@ -1,8 +1,8 @@
 import abc
 import enum
 import typing
-from collections.abc import Collection, MutableSet
-from typing import Final
+from collections.abc import Collection, Mapping, MutableMapping, MutableSet
+from typing import Final, NewType
 
 from arcsync.piece import Piece
 
@@ -18,8 +18,8 @@ class PlanetType(enum.Enum):
 
 @typing.final
 class PlanetSymbol(enum.Enum):
-    VEE = enum.auto()
-    MOON = enum.auto()
+    ARROW = enum.auto()
+    CRESCENT = enum.auto()
     HEXAGON = enum.auto()
 
 
@@ -89,4 +89,4 @@ class Reach(object):
 
 
 if __name__ == "__main__":
-    reach = Reach([Planet(1, PlanetSymbol.VEE, PlanetType.WEAPON, num_slots=2)])
+    reach = Reach([Planet(1, PlanetSymbol.ARROW, PlanetType.WEAPON, num_slots=2)])
