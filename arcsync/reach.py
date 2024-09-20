@@ -34,18 +34,20 @@ class PlanetSymbol(enum.Enum):
                 return "H"
 
 
+Cluster = NewType("Cluster", int)
+
 SystemID = NewType("SystemID", str)
 
 
 class System(object, metaclass=abc.ABCMeta):
     # Conceptually final; can't figure out how to make mypy happy, though.
-    cluster_number: int
+    cluster: Cluster
 
     adjacencies: Collection["System"]
     pieces: MutableSet[Piece]
 
     @abc.abstractmethod
-    def __init__(self, cluster_number: int) -> None: ...
+    def __init__(self, cluster: Cluster) -> None: ...
 
     @property
     @abc.abstractmethod
@@ -54,25 +56,25 @@ class System(object, metaclass=abc.ABCMeta):
 
 @typing.final
 class Gate(System):
-    cluster_number: int
+    cluster: Cluster
 
     adjacencies: Collection[System]
     pieces: MutableSet[Piece]
 
-    def __init__(self, cluster_number: int) -> None:
-        self.cluster_number = cluster_number
+    def __init__(self, cluster: Cluster) -> None:
+        self.cluster = cluster
 
         self.pieces = set()
         self.adjacencies = []
 
     @property
     def id(self) -> SystemID:
-        return SystemID(f"{self.cluster_number}G")
+        return SystemID(f"{self.cluster}G")
 
 
 @typing.final
 class Planet(System):
-    cluster_number: int
+    cluster: Cluster
     symbol: Final[PlanetSymbol]
     type: Final[PlanetType]
 
@@ -84,17 +86,17 @@ class Planet(System):
     # TODO(base): Move all @propertys to before __init__, so they are more like normal attributes.
     @property
     def id(self) -> SystemID:
-        return SystemID(f"{self.cluster_number}{self.symbol.abbreviation()}")
+        return SystemID(f"{self.cluster}{self.symbol.abbreviation()}")
 
     def __init__(
         self,
-        cluster_number: int,
+        cluster: Cluster,
         planet_symbol: PlanetSymbol,
         planet_type: PlanetType,
         *,
         num_slots: int,
     ) -> None:
-        self.cluster_number = cluster_number
+        self.cluster = cluster
         self.symbol = planet_symbol
         self.type = planet_type
 
@@ -116,4 +118,4 @@ class Reach(object):
 
 
 if __name__ == "__main__":
-    reach = Reach([Planet(1, PlanetSymbol.ARROW, PlanetType.WEAPON, num_slots=2)])
+    reach = Reach([Planet(Cluster(1), PlanetSymbol.ARROW, PlanetType.WEAPON, num_slots=2)])
