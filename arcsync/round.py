@@ -202,10 +202,9 @@ class Round(DunderDictReprMixin):
                 self._advance_to_pips()
             case Phase.PIPS:
                 if self._current_player_turn_order_index + 1 == len(self.turn_order):
-                    self.round_complete = True
+                    self._advance_to_end_of_round()
                     return
-                self._current_player_turn_order_index += 1
-                self.current_phase = Phase.CARD_PLAY
+                self._advance_to_next_turn()
 
     def _advance_to_prelude(self) -> None:
         if self._current_player_turn_order_index + 1 != self.number_of_plays_so_far:
@@ -217,6 +216,13 @@ class Round(DunderDictReprMixin):
     def _advance_to_pips(self) -> None:
         self.current_phase = Phase.PIPS
         self.pips_remaining = self.current_play.card.pips
+
+    def _advance_to_next_turn(self) -> None:
+        self._current_player_turn_order_index += 1
+        self.current_phase = Phase.CARD_PLAY
+
+    def _advance_to_end_of_round(self) -> None:
+        self.round_complete = True
 
     def lead(self, player: Color, turn_data: Lead) -> None:
         self._validate_turn(player)
