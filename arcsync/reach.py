@@ -22,6 +22,20 @@ class PlanetSymbol(enum.Enum):
     CRESCENT = enum.auto()
     HEXAGON = enum.auto()
 
+    # TODO(base): Make aliases for these, maybe using numbers for one set of aliases and pretty
+    # unicode for another.
+    def abbreviation(self) -> str:
+        match self:
+            case PlanetSymbol.ARROW:
+                return "A"
+            case PlanetSymbol.CRESCENT:
+                return "C"
+            case PlanetSymbol.HEXAGON:
+                return "H"
+
+
+SystemID = NewType("SystemID", str)
+
 
 class System(object, metaclass=abc.ABCMeta):
     # Conceptually final; can't figure out how to make mypy happy, though.
@@ -32,6 +46,10 @@ class System(object, metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def __init__(self, cluster_number: int) -> None: ...
+
+    @property
+    @abc.abstractmethod
+    def id(self) -> SystemID: ...
 
 
 @typing.final
@@ -47,6 +65,10 @@ class Gate(System):
         self.pieces = set()
         self.adjacencies = []
 
+    @property
+    def id(self) -> SystemID:
+        return SystemID(f"{self.cluster_number}G")
+
 
 @typing.final
 class Planet(System):
@@ -58,6 +80,11 @@ class Planet(System):
     pieces: MutableSet[Piece]
 
     _num_slots: int
+
+    # TODO(base): Move all @propertys to before __init__, so they are more like normal attributes.
+    @property
+    def id(self) -> SystemID:
+        return SystemID(f"{self.cluster_number}{self.symbol.abbreviation()}")
 
     def __init__(
         self,
