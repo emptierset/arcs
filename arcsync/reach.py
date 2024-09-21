@@ -77,11 +77,10 @@ class Planet(System):
     cluster: Cluster
     symbol: Final[PlanetSymbol]
     type: Final[PlanetType]
+    num_slots: int
 
     adjacencies: Collection[System]
     pieces: MutableSet[Piece]
-
-    _num_slots: int
 
     # TODO(base): Move all @propertys to before __init__, so they are more like normal attributes.
     @property
@@ -99,11 +98,10 @@ class Planet(System):
         self.cluster = cluster
         self.symbol = planet_symbol
         self.type = planet_type
+        self.num_slots = num_slots
 
         self.pieces = set()
         self.adjacencies = []
-
-        self._num_slots = num_slots
 
     # def add_piece
     # def remove_piece
