@@ -6,10 +6,8 @@ from typing import Final, NewType
 import arcsync.setupcard
 from arcsync.actioncard import ActionCardDeck, ActionCardDiscard
 from arcsync.ambition import AmbitionManager
-from arcsync.card import Deck
 from arcsync.color import Color
 from arcsync.court import Court
-from arcsync.courtcard import CourtCard
 from arcsync.event import InitiativeSeizedEvent
 from arcsync.eventbus import EventBus
 from arcsync.player import Player
@@ -32,7 +30,6 @@ class Game(object):
     action_card_deck: Final[ActionCardDeck]
     action_card_discard: Final[ActionCardDeck]
 
-    court_deck: Final[Deck[CourtCard]]
     court: Final[Court]
 
     _event_bus: Final[EventBus]
@@ -54,8 +51,7 @@ class Game(object):
         self.action_card_deck = ActionCardDeck(player_count=4)
         self.action_card_discard = ActionCardDiscard()
 
-        self.court_deck = Deck[CourtCard]([])
-        self.court = Court(num_slots=4)
+        self.court = Court([], num_slots=4)
 
         def handle_initiative_seized_event(e: InitiativeSeizedEvent) -> None:
             self.initiative = e.player

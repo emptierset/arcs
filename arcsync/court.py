@@ -1,7 +1,9 @@
 import typing
 from collections import Counter
-from typing import Final, Sequence
+from collections.abc import Collection, Sequence
+from typing import Final
 
+from arcsync.card import Deck
 from arcsync.color import Color
 from arcsync.courtcard import CourtCard
 
@@ -20,12 +22,18 @@ class CardInCourt(object):
 
 @typing.final
 class Court(object):
-    cards: Sequence[CardInCourt | None]
-    _num_slots: Final[int]
+    deck: Final[Deck[CourtCard]]
 
-    def __init__(self, *, num_slots: int) -> None:
-        self.cards = [None] * num_slots
-        self._num_slots = num_slots
+    # `cards` should never be appended to or popped from. It should always have the same number of
+    # elements, forever.
+    # TODO(base): We can probably enforce this with mypy.
+    cards: Final[Sequence[CardInCourt]]
+
+    def __init__(self, deck: Collection[CourtCard], *, num_slots: int) -> None:
+        self.deck = Deck[CourtCard](deck)
+        self.deck.shuffle()
+        initial_flop = self.deck.draw(num_slots)
+        self.cards = [CardInCourt(card) for card in initial_flop]
 
 
 if __name__ == "__main__":
