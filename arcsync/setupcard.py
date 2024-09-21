@@ -1,6 +1,6 @@
 import abc
 import dataclasses
-from collections.abc import Collection
+from collections.abc import Collection, Sequence
 from typing import Final
 
 from arcsync.reach import SystemID
@@ -49,7 +49,7 @@ class FourPlayerSetupCard(SetupCard):
     player4: PlayerSetupSystems
 
 
-two_player_setup_cards: Final[Collection[TwoPlayerSetupCard]] = [
+two_player_setup_cards: Final[Sequence[TwoPlayerSetupCard]] = [
     TwoPlayerSetupCard(
         "Frontiers",
         [1, 6],
@@ -65,7 +65,7 @@ two_player_setup_cards: Final[Collection[TwoPlayerSetupCard]] = [
     # TODO(base): Mix Up 2
 ]
 
-three_player_setup_cards: Final[Collection[ThreePlayerSetupCard]] = [
+three_player_setup_cards: Final[Sequence[ThreePlayerSetupCard]] = [
     ThreePlayerSetupCard(
         "Mix Up",
         [1, 4],
@@ -90,7 +90,7 @@ three_player_setup_cards: Final[Collection[ThreePlayerSetupCard]] = [
     # TODO(base): Core Conflict
 ]
 
-four_player_setup_cards: Final[Collection[FourPlayerSetupCard]] = [
+four_player_setup_cards: Final[Sequence[FourPlayerSetupCard]] = [
     FourPlayerSetupCard(
         "Mix Up 1",
         [3],
