@@ -37,11 +37,13 @@ class Game(object):
 
     _event_bus: Final[EventBus]
 
-    def __init__(self, players: Sequence[Player]) -> None:
+    def __init__(self) -> None:
         self._event_bus = EventBus()
 
-        self.players = players
-        self.initiative = random.choice(players).color
+        colors = [Color.RED, Color.BLUE, Color.WHITE, Color.YELLOW]
+        random_turn_order = random.sample(colors, len(colors))
+        self.players = [Player(color) for color in random_turn_order]
+        self.initiative = self.players[0].color
         self.chapter = Chapter(1)
 
         self.ambition_manager = AmbitionManager(self._event_bus)
@@ -55,10 +57,11 @@ class Game(object):
         self.court_deck = Deck[CourtCard]([])
         self.court = Court(num_slots=4)
 
-    def _init_event_handlers(self) -> None:
         def handle_initiative_seized_event(e: InitiativeSeizedEvent) -> None:
             self.initiative = e.player
 
+        self._event_bus.subscribe(InitiativeSeizedEvent, handle_initiative_seized_event)
+
 
 if __name__ == "__main__":
-    g = Game([Player(Color.RED), Player(Color.BLUE), Player(Color.WHITE), Player(Color.YELLOW)])
+    g = Game()
