@@ -1,3 +1,4 @@
+import abc
 import dataclasses
 from collections.abc import Collection
 from typing import Final
@@ -13,7 +14,7 @@ class PlayerSetupSystems(object):
 
 
 @dataclasses.dataclass(frozen=True)
-class SetupCard(object):
+class SetupCard(object, metaclass=abc.ABCMeta):
     name: str
     out_of_play_clusters: Collection[int]
 
