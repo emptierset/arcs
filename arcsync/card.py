@@ -31,18 +31,27 @@ class Deck(Generic[CardT]):
     def put_on_top(self, card: CardT) -> None:
         self._cards.appendleft(card)
 
-    def draw(self, num_card: int = 1) -> list[CardT]:
+    def draw(self, num: int = 1) -> list[CardT]:
+        if len(self._cards) < num:
+            raise ValueError(
+                f"Cannot draw {num} cards from a deck with only {len(self._cards)} cards."
+            )
         cs: list[CardT] = []
-        for _ in range(num_card):
+        for _ in range(num):
             cs.append(self._cards.popleft())
         return cs
 
     def put_on_bottom(self, card: CardT) -> None:
         self._cards.append(card)
 
-    def draw_from_bottom(self, num_card: int = 1) -> list[CardT]:
+    def draw_from_bottom(self, num: int = 1) -> list[CardT]:
+        if len(self._cards) < num:
+            raise ValueError(
+                f"Cannot draw {num} cards from the bottom of a deck with only "
+                f"{len(self._cards)} cards."
+            )
         cs: list[CardT] = []
-        for _ in range(num_card):
+        for _ in range(num):
             cs.append(self._cards.pop())
         return cs
 
