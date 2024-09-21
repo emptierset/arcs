@@ -3,7 +3,7 @@ import dataclasses
 from collections.abc import Collection, Sequence
 from typing import Final
 
-from arcsync.reach import SystemID
+from arcsync.reach import Cluster, SystemID
 
 
 @dataclasses.dataclass(kw_only=True, frozen=True)
@@ -16,14 +16,14 @@ class PlayerSetupSystems(object):
 @dataclasses.dataclass(frozen=True)
 class SetupCard(object, metaclass=abc.ABCMeta):
     name: str
-    out_of_play_clusters: Collection[int]
+    in_play_clusters: Collection[Cluster]
 
 
 @dataclasses.dataclass(frozen=True)
 class TwoPlayerSetupCard(SetupCard):
     name: str
-    out_of_play_clusters: Collection[int]
     _: dataclasses.KW_ONLY
+    in_play_clusters: Collection[Cluster]
     player1: PlayerSetupSystems
     player2: PlayerSetupSystems
 
@@ -31,8 +31,8 @@ class TwoPlayerSetupCard(SetupCard):
 @dataclasses.dataclass(frozen=True)
 class ThreePlayerSetupCard(SetupCard):
     name: str
-    out_of_play_clusters: Collection[int]
     _: dataclasses.KW_ONLY
+    in_play_clusters: Collection[Cluster]
     player1: PlayerSetupSystems
     player2: PlayerSetupSystems
     player3: PlayerSetupSystems
@@ -41,8 +41,8 @@ class ThreePlayerSetupCard(SetupCard):
 @dataclasses.dataclass(frozen=True)
 class FourPlayerSetupCard(SetupCard):
     name: str
-    out_of_play_clusters: Collection[int]
     _: dataclasses.KW_ONLY
+    in_play_clusters: Collection[Cluster]
     player1: PlayerSetupSystems
     player2: PlayerSetupSystems
     player3: PlayerSetupSystems
@@ -52,7 +52,7 @@ class FourPlayerSetupCard(SetupCard):
 two_player_setup_cards: Final[Sequence[TwoPlayerSetupCard]] = [
     TwoPlayerSetupCard(
         "Frontiers",
-        [1, 6],
+        in_play_clusters=[Cluster(2), Cluster(3), Cluster(4), Cluster(5)],
         player1=PlayerSetupSystems(
             a=SystemID("5H"), b=SystemID("4H"), c=(SystemID("3H"), SystemID("3G"))
         ),
@@ -68,7 +68,7 @@ two_player_setup_cards: Final[Sequence[TwoPlayerSetupCard]] = [
 three_player_setup_cards: Final[Sequence[ThreePlayerSetupCard]] = [
     ThreePlayerSetupCard(
         "Mix Up",
-        [1, 4],
+        in_play_clusters=[Cluster(2), Cluster(3), Cluster(5), Cluster(6)],
         player1=PlayerSetupSystems(
             a=SystemID("3H"),
             b=SystemID("5C"),
@@ -93,7 +93,7 @@ three_player_setup_cards: Final[Sequence[ThreePlayerSetupCard]] = [
 four_player_setup_cards: Final[Sequence[FourPlayerSetupCard]] = [
     FourPlayerSetupCard(
         "Mix Up 1",
-        [3],
+        in_play_clusters=[Cluster(1), Cluster(2), Cluster(4), Cluster(5), Cluster(6)],
         player1=PlayerSetupSystems(
             a=SystemID("4A"),
             b=SystemID("6H"),
