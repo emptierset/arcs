@@ -3,7 +3,8 @@ import dataclasses
 import typing
 
 # This file will need to import most of the game's concepts, but only as type annotations. We'll
-# import them as TYPE_CHECKING only to avoid circular imports.
+# import them as TYPE_CHECKING only to avoid circular imports. This means that many of the type
+# annotations in this file will be ugly string forward references.
 if typing.TYPE_CHECKING:
     from arcsync.ambition import Ambition
     from arcsync.color import Color
@@ -22,7 +23,7 @@ class AmbitionDeclaredEvent(Event):
 
 
 @dataclasses.dataclass(frozen=True)
-class InitiativeSeizedEvent(Event):
+class InitiativeGainedEvent(Event):
     player: "Color"
 
 

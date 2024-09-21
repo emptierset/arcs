@@ -8,7 +8,7 @@ from arcsync.actioncard import ActionCardDeck, ActionCardDiscard
 from arcsync.ambition import AmbitionManager
 from arcsync.color import Color
 from arcsync.court import Court
-from arcsync.event import InitiativeSeizedEvent
+from arcsync.event import InitiativeGainedEvent
 from arcsync.eventbus import EventBus
 from arcsync.player import Player
 from arcsync.reach import Reach
@@ -53,10 +53,12 @@ class Game(object):
 
         self.court = Court([], num_slots=4)
 
-        def handle_initiative_seized_event(e: InitiativeSeizedEvent) -> None:
+        # Initialize event handlers below this.
+
+        def handle_initiative_gained_event(e: InitiativeGainedEvent) -> None:
             self.initiative = e.player
 
-        self._event_bus.subscribe(InitiativeSeizedEvent, handle_initiative_seized_event)
+        self._event_bus.subscribe(InitiativeGainedEvent, handle_initiative_gained_event)
 
 
 if __name__ == "__main__":

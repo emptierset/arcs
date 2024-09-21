@@ -23,6 +23,8 @@ class Ambition(enum.Enum):
 Power = NewType("Power", int)
 
 
+# TODO(base): We may need to keep track of whether there was an ambition declared this round, for
+# things like Galactic Bards. That may get tracked here, or somewhere else.
 @typing.final
 class AmbitionMarker(DunderDictReprMixin):
     value: Power
@@ -67,11 +69,11 @@ class AmbitionManager(DunderDictReprMixin):
             Ambition.EMPATH: set(),
         }
 
-        # For convenience, if you are testing and don't need an event bus, you can skip it. One
-        # will be created, but it won't be very useful because it won't be linked to anything else.
+        # For convenience, if you are unit testing one component and don't need an event bus, you
+        # can skip it. One will be created, but it won't be very useful because it won't be linked
+        # to anything else.
         if event_bus is None:
             event_bus = EventBus()
-
         self._event_bus = event_bus
         self.initialize_event_handlers()
 
