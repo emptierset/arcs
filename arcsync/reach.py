@@ -157,6 +157,8 @@ class Planet(System):
 class Reach(object):
     systems: Final[Mapping[SystemID, System]]
 
+    excluded_system_ids: Final[Collection[SystemID]]
+
     def __init__(self, setup_card: "SetupCard") -> None:
         m: MutableMapping[SystemID, System] = dict()
 
@@ -216,6 +218,8 @@ class Reach(object):
             except KeyError:
                 pass
 
+        excluded_system_ids: list[SystemID] = []
+
         if Cluster(1) in setup_card.in_play_clusters:
             g1 = Gate(Cluster(1))
             m["1.G"] = g1
@@ -224,6 +228,8 @@ class Reach(object):
             m["1.3"] = Planet("1.3", PlanetType.MATERIAL, num_slots=2)
             init_gate_to_adjacent_gate_edges(g1)
             Reach.add_edges(m["1.G"], [m["1.1"], m["1.2"], m["1.3"]])
+        else:
+            excluded_system_ids.extend(["1.G", "1.1", "1.2", "1.3"])
 
         if Cluster(2) in setup_card.in_play_clusters:
             g2 = Gate(Cluster(2))
@@ -233,6 +239,8 @@ class Reach(object):
             m["2.3"] = Planet("2.3", PlanetType.RELIC, num_slots=2)
             init_gate_to_adjacent_gate_edges(g2)
             Reach.add_edges(m["2.G"], [m["2.1"], m["2.2"], m["2.3"]])
+        else:
+            excluded_system_ids.extend(["2.G", "2.1", "2.2", "2.3"])
 
         if Cluster(3) in setup_card.in_play_clusters:
             g3 = Gate(Cluster(3))
@@ -242,6 +250,8 @@ class Reach(object):
             m["3.3"] = Planet("3.3", PlanetType.WEAPON, num_slots=2)
             init_gate_to_adjacent_gate_edges(g3)
             Reach.add_edges(m["3.G"], [m["3.1"], m["3.2"], m["3.3"]])
+        else:
+            excluded_system_ids.extend(["3.G", "3.1", "3.2", "3.3"])
 
         if Cluster(4) in setup_card.in_play_clusters:
             g4 = Gate(Cluster(4))
@@ -251,6 +261,8 @@ class Reach(object):
             m["4.3"] = Planet("4.3", PlanetType.MATERIAL, num_slots=1)
             init_gate_to_adjacent_gate_edges(g4)
             Reach.add_edges(m["4.G"], [m["4.1"], m["4.2"], m["4.3"]])
+        else:
+            excluded_system_ids.extend(["4.G", "4.1", "4.2", "4.3"])
 
         if Cluster(5) in setup_card.in_play_clusters:
             g5 = Gate(Cluster(5))
@@ -260,6 +272,8 @@ class Reach(object):
             m["5.3"] = Planet("5.3", PlanetType.PSIONIC, num_slots=2)
             init_gate_to_adjacent_gate_edges(g5)
             Reach.add_edges(m["5.G"], [m["5.1"], m["5.2"], m["5.3"]])
+        else:
+            excluded_system_ids.extend(["5.G", "5.1", "5.2", "5.3"])
 
         if Cluster(6) in setup_card.in_play_clusters:
             g6 = Gate(Cluster(6))
@@ -269,6 +283,8 @@ class Reach(object):
             m["6.3"] = Planet("6.3", PlanetType.PSIONIC, num_slots=1)
             init_gate_to_adjacent_gate_edges(g6)
             Reach.add_edges(m["6.G"], [m["6.1"], m["6.2"], m["6.3"]])
+        else:
+            excluded_system_ids.extend(["6.G", "6.1", "6.2", "6.3"])
 
         # These are "edge case" (ha!) edges between two pairs of clusters if they are both in the
         # game.
@@ -278,6 +294,7 @@ class Reach(object):
             Reach.add_edge(m["5.3"], m["6.1"])
 
         self.systems = m
+        self.excluded_system_ids = excluded_system_ids
 
     # Adjacency is always bidirectional (until Gate Wraith.......).
     @staticmethod
