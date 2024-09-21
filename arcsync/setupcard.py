@@ -118,3 +118,6 @@ four_player_setup_cards: Final[Collection[FourPlayerSetupCard]] = [
     # TODO(base): Frontiers
     # TODO(base): Mix Up 3
 ]
+
+if __name__ == "__main__":
+    pass

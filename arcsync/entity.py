@@ -11,3 +11,7 @@ class NonPlayerEntity(enum.Enum):
 
 
 Entity = Color | NonPlayerEntity
+
+
+if __name__ == "__main__":
+    pass

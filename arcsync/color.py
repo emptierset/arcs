@@ -8,3 +8,7 @@ class Color(enum.Enum):
     BLUE = enum.auto()
     YELLOW = enum.auto()
     WHITE = enum.auto()
+
+
+if __name__ == "__main__":
+    pass

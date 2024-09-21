@@ -369,4 +369,4 @@ class Round(DunderDictReprMixin):
 
 
 if __name__ == "__main__":
-    r = Round([Color.RED, Color.BLUE, Color.YELLOW], AmbitionManager())
+    pass

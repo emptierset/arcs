@@ -112,20 +112,4 @@ def hit(culprit: Entity, p: DamageablePiece, *, num_hits: int = 1) -> None:
 
 
 if __name__ == "__main__":
-    s1 = Ship(Color.BLUE)
-    s2 = Ship(Color.BLUE, DamageState.DAMAGED)
-
-    x: list[Ship] = [s1]
-    y: list[MapPiece] = [s1]
-    z: list[Piece] = [s1]
-
-    a1 = Agent(Color.BLUE)
-
-    d: DamageablePiece = s2
-    ds: list[DamageablePiece] = [s2]
-
-    bc = City(Color.BLUE)
-
-    print(s1)
-    hit(Color.BLUE, s1, num_hits=4)
-    print(s1)
+    pass

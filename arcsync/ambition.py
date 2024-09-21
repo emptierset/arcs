@@ -108,13 +108,4 @@ class AmbitionManager(DunderDictReprMixin):
 
 
 if __name__ == "__main__":
-    a = AmbitionManager()
-    print(a.available_markers)
-    a.declare(Color.RED, Ambition.TYCOON)
-    print(a)
-    a.declare(Color.RED, Ambition.TYCOON)
-    a.declare(Color.WHITE, Ambition.EMPATH)
-    print(a)
-    print(a.value_of(Ambition.TYCOON))
-    a.clear()
-    print(a)
+    pass

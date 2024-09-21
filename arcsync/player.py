@@ -68,4 +68,4 @@ class Player(object):
 
 
 if __name__ == "__main__":
-    p = Player(Color.BLUE)
+    pass

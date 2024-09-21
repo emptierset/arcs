@@ -118,4 +118,4 @@ class Reach(object):
 
 
 if __name__ == "__main__":
-    reach = Reach([Planet(Cluster(1), PlanetSymbol.ARROW, PlanetType.WEAPON, num_slots=2)])
+    pass
