@@ -6,6 +6,7 @@ from collections.abc import Collection, Mapping, MutableMapping, MutableSet
 from typing import Final, NewType
 
 from arcsync.piece import Piece
+from arcsync.util import DunderDictReprTruncatedSequencesMixin
 
 
 @typing.final
@@ -75,7 +76,7 @@ def _decompose_system_id(system_id: SystemID) -> tuple[Cluster, PlanetSymbol | N
     return Cluster(cluster), planet_symbol
 
 
-class System(object, metaclass=abc.ABCMeta):
+class System(DunderDictReprTruncatedSequencesMixin, metaclass=abc.ABCMeta):
     # cluster is conceptually final; can't figure out how to make mypy happy, though.
     cluster: Cluster
 
