@@ -28,7 +28,7 @@ doc:
 ## black: Format code using black.
 .PHONY: black
 black:
-	$(ENV_PREFIX)black -l 99 $(SRC_DIRECTORIES)
+	$(ENV_PREFIX)black -l 99 --preview --enable-unstable-feature=string_processing $(SRC_DIRECTORIES)
 
 ## blackcheckonly: Check code format using black.
 .PHONY: blackcheckonly
