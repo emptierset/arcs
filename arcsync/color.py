@@ -7,10 +7,10 @@ import typing
 # `player_color`.
 @typing.final
 class Color(enum.Enum):
-    RED = enum.auto()
-    BLUE = enum.auto()
-    YELLOW = enum.auto()
-    WHITE = enum.auto()
+    RED = 1
+    BLUE = 2
+    YELLOW = 3
+    WHITE = 4
 
 
 if __name__ == "__main__":

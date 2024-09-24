@@ -7,11 +7,11 @@ from typing import Final, NewType
 
 @typing.final
 class Symbol(enum.Enum):
-    HIT = enum.auto()
-    BUILDING_HIT = enum.auto()
-    SELF_HIT = enum.auto()
-    KEY = enum.auto()
-    INTERCEPT = enum.auto()
+    HIT = 1
+    BUILDING_HIT = 2
+    SELF_HIT = 3
+    KEY = 4
+    INTERCEPT = 5
 
 
 Face = NewType("Face", Counter[Symbol])

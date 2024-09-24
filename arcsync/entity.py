@@ -6,8 +6,8 @@ from arcsync.color import Color
 
 @typing.final
 class NonPlayerEntity(enum.Enum):
-    EMPIRE = enum.auto()
-    BLIGHT = enum.auto()
+    EMPIRE = 1
+    BLIGHT = 2
 
 
 Entity = Color | NonPlayerEntity

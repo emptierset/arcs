@@ -8,10 +8,11 @@ from arcsync.card import Card, Deck
 
 @typing.final
 class Suit(enum.Enum):
-    ADMINISTRATION = enum.auto()
-    CONSTRUCTION = enum.auto()
-    MOBILIZATION = enum.auto()
-    AGGRESSION = enum.auto()
+    ADMINISTRATION = 1
+    CONSTRUCTION = 2
+    MOBILIZATION = 3
+    AGGRESSION = 4
+
     # TODO(campaign): FAITHFUL_ZEAL, FAITHFUL_WISDOM.
 
 

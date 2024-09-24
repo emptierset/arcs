@@ -25,9 +25,9 @@ rank_from_ambition: Final[Mapping[Ambition, Rank]] = {
 
 @typing.final
 class Phase(enum.Enum):
-    CARD_PLAY = enum.auto()
-    PRELUDE = enum.auto()
-    PIPS = enum.auto()
+    CARD_PLAY = 1
+    PRELUDE = 2
+    PIPS = 3
 
 
 @typing.runtime_checkable

@@ -4,11 +4,11 @@ import typing
 
 @typing.final
 class Resource(enum.Enum):
-    MATERIAL = enum.auto()
-    FUEL = enum.auto()
-    WEAPON = enum.auto()
-    RELIC = enum.auto()
-    PSIONIC = enum.auto()
+    MATERIAL = 1
+    FUEL = 2
+    WEAPON = 3
+    RELIC = 4
+    PSIONIC = 5
 
 
 if __name__ == "__main__":

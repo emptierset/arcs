@@ -9,9 +9,9 @@ from arcsync.util import DunderDictReprMixin
 
 @typing.final
 class DamageState(enum.Enum):
-    FRESH = enum.auto()
-    DAMAGED = enum.auto()
-    DESTROYED = enum.auto()
+    FRESH = 1
+    DAMAGED = 2
+    DESTROYED = 3
 
 
 @typing.runtime_checkable

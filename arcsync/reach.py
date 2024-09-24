@@ -14,18 +14,18 @@ if typing.TYPE_CHECKING:
 
 @typing.final
 class PlanetType(enum.Enum):
-    MATERIAL = enum.auto()
-    FUEL = enum.auto()
-    WEAPON = enum.auto()
-    RELIC = enum.auto()
-    PSIONIC = enum.auto()
+    MATERIAL = 1
+    FUEL = 2
+    WEAPON = 3
+    RELIC = 4
+    PSIONIC = 5
 
 
 @typing.final
 class PlanetSymbol(enum.Enum):
-    ARROW = enum.auto()
-    CRESCENT = enum.auto()
-    HEXAGON = enum.auto()
+    ARROW = 1
+    CRESCENT = 2
+    HEXAGON = 3
 
     def alphabetic_abbreviation(self) -> str:
         match self:
