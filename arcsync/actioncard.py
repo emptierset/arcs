@@ -38,9 +38,9 @@ class ActionCard(Card):
 class ActionCardDeck(Deck[ActionCard]):
     def __init__(self, *, player_count: int) -> None:
         if 2 <= player_count <= 3:
-            super().__init__(basic_2_3p_action_cards)
+            super().__init__(basic_2_3p_cards)
         elif player_count == 4:
-            super().__init__(basic_4p_action_cards)
+            super().__init__(basic_4p_cards)
         else:
             raise ValueError(f"only 2, 3, and 4 player games are supported, not {player_count}")
 
@@ -51,7 +51,7 @@ class ActionCardDiscard(ActionCardDeck):
         super(ActionCardDeck, self).__init__([])
 
 
-basic_action_cards: Final[Mapping[Suit, Mapping[Rank, ActionCard]]] = {
+basic_cards: Final[Mapping[Suit, Mapping[Rank, ActionCard]]] = {
     Suit.ADMINISTRATION: {
         1: ActionCard(Suit.ADMINISTRATION, rank=1, pips=4),
         2: ActionCard(Suit.ADMINISTRATION, rank=2, pips=4),
@@ -92,62 +92,62 @@ basic_action_cards: Final[Mapping[Suit, Mapping[Rank, ActionCard]]] = {
 
 
 # TODO(base): Make this a Collection.
-basic_2_3p_action_cards: Final[frozenset[ActionCard]] = frozenset(
+basic_2_3p_cards: Final[frozenset[ActionCard]] = frozenset(
     [
-        basic_action_cards[Suit.ADMINISTRATION][2],
-        basic_action_cards[Suit.ADMINISTRATION][3],
-        basic_action_cards[Suit.ADMINISTRATION][4],
-        basic_action_cards[Suit.ADMINISTRATION][5],
-        basic_action_cards[Suit.ADMINISTRATION][6],
-        basic_action_cards[Suit.CONSTRUCTION][2],
-        basic_action_cards[Suit.CONSTRUCTION][3],
-        basic_action_cards[Suit.CONSTRUCTION][4],
-        basic_action_cards[Suit.CONSTRUCTION][5],
-        basic_action_cards[Suit.CONSTRUCTION][6],
-        basic_action_cards[Suit.MOBILIZATION][2],
-        basic_action_cards[Suit.MOBILIZATION][3],
-        basic_action_cards[Suit.MOBILIZATION][4],
-        basic_action_cards[Suit.MOBILIZATION][5],
-        basic_action_cards[Suit.MOBILIZATION][6],
-        basic_action_cards[Suit.AGGRESSION][2],
-        basic_action_cards[Suit.AGGRESSION][3],
-        basic_action_cards[Suit.AGGRESSION][4],
-        basic_action_cards[Suit.AGGRESSION][5],
-        basic_action_cards[Suit.AGGRESSION][6],
+        basic_cards[Suit.ADMINISTRATION][2],
+        basic_cards[Suit.ADMINISTRATION][3],
+        basic_cards[Suit.ADMINISTRATION][4],
+        basic_cards[Suit.ADMINISTRATION][5],
+        basic_cards[Suit.ADMINISTRATION][6],
+        basic_cards[Suit.CONSTRUCTION][2],
+        basic_cards[Suit.CONSTRUCTION][3],
+        basic_cards[Suit.CONSTRUCTION][4],
+        basic_cards[Suit.CONSTRUCTION][5],
+        basic_cards[Suit.CONSTRUCTION][6],
+        basic_cards[Suit.MOBILIZATION][2],
+        basic_cards[Suit.MOBILIZATION][3],
+        basic_cards[Suit.MOBILIZATION][4],
+        basic_cards[Suit.MOBILIZATION][5],
+        basic_cards[Suit.MOBILIZATION][6],
+        basic_cards[Suit.AGGRESSION][2],
+        basic_cards[Suit.AGGRESSION][3],
+        basic_cards[Suit.AGGRESSION][4],
+        basic_cards[Suit.AGGRESSION][5],
+        basic_cards[Suit.AGGRESSION][6],
     ]
 )
 
 
-basic_4p_action_cards: Final[frozenset[ActionCard]] = frozenset(
+basic_4p_cards: Final[frozenset[ActionCard]] = frozenset(
     [
-        basic_action_cards[Suit.ADMINISTRATION][1],
-        basic_action_cards[Suit.ADMINISTRATION][2],
-        basic_action_cards[Suit.ADMINISTRATION][3],
-        basic_action_cards[Suit.ADMINISTRATION][4],
-        basic_action_cards[Suit.ADMINISTRATION][5],
-        basic_action_cards[Suit.ADMINISTRATION][6],
-        basic_action_cards[Suit.ADMINISTRATION][7],
-        basic_action_cards[Suit.CONSTRUCTION][1],
-        basic_action_cards[Suit.CONSTRUCTION][2],
-        basic_action_cards[Suit.CONSTRUCTION][3],
-        basic_action_cards[Suit.CONSTRUCTION][4],
-        basic_action_cards[Suit.CONSTRUCTION][5],
-        basic_action_cards[Suit.CONSTRUCTION][6],
-        basic_action_cards[Suit.CONSTRUCTION][7],
-        basic_action_cards[Suit.MOBILIZATION][1],
-        basic_action_cards[Suit.MOBILIZATION][2],
-        basic_action_cards[Suit.MOBILIZATION][3],
-        basic_action_cards[Suit.MOBILIZATION][4],
-        basic_action_cards[Suit.MOBILIZATION][5],
-        basic_action_cards[Suit.MOBILIZATION][6],
-        basic_action_cards[Suit.MOBILIZATION][7],
-        basic_action_cards[Suit.AGGRESSION][1],
-        basic_action_cards[Suit.AGGRESSION][2],
-        basic_action_cards[Suit.AGGRESSION][3],
-        basic_action_cards[Suit.AGGRESSION][4],
-        basic_action_cards[Suit.AGGRESSION][5],
-        basic_action_cards[Suit.AGGRESSION][6],
-        basic_action_cards[Suit.AGGRESSION][7],
+        basic_cards[Suit.ADMINISTRATION][1],
+        basic_cards[Suit.ADMINISTRATION][2],
+        basic_cards[Suit.ADMINISTRATION][3],
+        basic_cards[Suit.ADMINISTRATION][4],
+        basic_cards[Suit.ADMINISTRATION][5],
+        basic_cards[Suit.ADMINISTRATION][6],
+        basic_cards[Suit.ADMINISTRATION][7],
+        basic_cards[Suit.CONSTRUCTION][1],
+        basic_cards[Suit.CONSTRUCTION][2],
+        basic_cards[Suit.CONSTRUCTION][3],
+        basic_cards[Suit.CONSTRUCTION][4],
+        basic_cards[Suit.CONSTRUCTION][5],
+        basic_cards[Suit.CONSTRUCTION][6],
+        basic_cards[Suit.CONSTRUCTION][7],
+        basic_cards[Suit.MOBILIZATION][1],
+        basic_cards[Suit.MOBILIZATION][2],
+        basic_cards[Suit.MOBILIZATION][3],
+        basic_cards[Suit.MOBILIZATION][4],
+        basic_cards[Suit.MOBILIZATION][5],
+        basic_cards[Suit.MOBILIZATION][6],
+        basic_cards[Suit.MOBILIZATION][7],
+        basic_cards[Suit.AGGRESSION][1],
+        basic_cards[Suit.AGGRESSION][2],
+        basic_cards[Suit.AGGRESSION][3],
+        basic_cards[Suit.AGGRESSION][4],
+        basic_cards[Suit.AGGRESSION][5],
+        basic_cards[Suit.AGGRESSION][6],
+        basic_cards[Suit.AGGRESSION][7],
     ]
 )
 
