@@ -38,7 +38,7 @@ blackcheckonly:
 ## isort: Format code using isort.
 .PHONY: isort
 isort:
-	$(ENV_PREFIX)isort --line-length 99 $(SRC_DIRECTORIES)
+	$(ENV_PREFIX)isort --line-length 99 --profile black $(SRC_DIRECTORIES)
 
 ## autoflake: Remove unused imports using autoflake.
 .PHONY: autoflake
