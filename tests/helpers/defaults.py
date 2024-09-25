@@ -2,7 +2,7 @@ from collections.abc import Sequence
 
 from arcsync.actioncard import ActionCard
 from arcsync.color import Color
-from arcsync.round import Lead, PassInitiative, Play, Surpass
+from arcsync.play import Lead, PassInitiative, Play, Surpass
 from tests.helpers.actioncard_shorthand import ADMIN, AGGRE, CONST
 
 multipip_card: ActionCard = ADMIN[3]

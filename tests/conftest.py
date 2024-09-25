@@ -4,7 +4,7 @@ from pytest import fixture
 
 from arcsync.actioncard import ActionCard
 from arcsync.color import Color
-from arcsync.round import Lead, PassInitiative, Play, Surpass
+from arcsync.play import Lead, PassInitiative, Play, Surpass
 from tests.helpers import defaults
 
 

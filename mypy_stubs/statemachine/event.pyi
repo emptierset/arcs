@@ -1,0 +1,16 @@
+# from .event_data import TriggerData as TriggerData
+# from .statemachine import StateMachine as StateMachine
+# from _typeshed import Incomplete
+# from statemachine.utils import run_async_from_sync as run_async_from_sync
+
+from typing import Any
+
+def __getattr__(name: str) -> Any: ...
+
+# class Event:
+#    name: Incomplete
+#    def __init__(self, name: str) -> None: ...
+#    def trigger(self, machine: StateMachine, *args, **kwargs): ...
+#
+# def trigger_event_factory(event_instance: Event): ...
+# def same_event_cond_builder(expected_event: str): ...

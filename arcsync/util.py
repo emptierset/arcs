@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import pprint
 from collections.abc import Sequence
 from typing import Any, NoReturn
 
@@ -38,13 +37,9 @@ class DunderDictReprMixin(object):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
-    # TODO(cleanup): Conditionally print newlines when pprint.pformat emits multiline output.
-    # e.g., if pformat's output is simple, we can just emit it as we have here. If pformat's output
-    # is multiline, then this code produces ugly output because the parens are on the same line as
-    # the first and last values.
     def __repr__(self) -> str:
         instance_attrs = {k: v for k, v in self.__dict__.items() if not hasattr(self.__class__, k)}
-        return f"{type(self).__name__}({pprint.pformat(instance_attrs)[1:-1]})"
+        return f"{type(self).__name__}({repr(instance_attrs)[1:-1]})"
 
 
 class DunderDictReprTruncatedSequencesMixin(object):
