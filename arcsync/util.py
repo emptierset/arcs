@@ -20,7 +20,7 @@ class DunderDictEqMixin(object):
     """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        pass
+        super().__init__(*args, **kwargs)
 
     def __eq__(self, other: object) -> bool:
         if not issubclass(other.__class__, DunderDictEqMixin):
@@ -36,7 +36,7 @@ class DunderDictReprMixin(object):
     """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        pass
+        super().__init__(*args, **kwargs)
 
     # TODO(cleanup): Conditionally print newlines when pprint.pformat emits multiline output.
     # e.g., if pformat's output is simple, we can just emit it as we have here. If pformat's output
@@ -61,7 +61,7 @@ class DunderDictReprTruncatedSequencesMixin(object):
     """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        pass
+        super().__init__(*args, **kwargs)
 
     def __repr__(self) -> str:
         # This doesn't work if dataclasses were created in the "bare" manner, since it thinks all
