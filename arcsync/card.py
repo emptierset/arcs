@@ -19,6 +19,9 @@ class Deck(Generic[CardT]):
     def __init__(self, cards: Collection[CardT]) -> None:
         self._cards = collections.deque(cards)
 
+    def __len__(self) -> int:
+        return len(self._cards)
+
     def shuffle(self) -> None:
         to_shuffle = list(self._cards)
         random.shuffle(to_shuffle)
