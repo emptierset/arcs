@@ -3,12 +3,21 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
+from enum import Enum
 from typing import Any, NoReturn
+
+from typing_extensions import Self
 
 
 # TODO(base): Update to Python 3.11 so we can just import this from typing.
 def assert_never(value: NoReturn) -> NoReturn:
     assert False, f"Unhandled value: {value} ({type(value).__name__})"
+
+
+class EnumerableEnum(Enum):
+    @classmethod
+    def values(cls) -> list[Self]:
+        return list(cls.__members__.values())
 
 
 class DunderDictEqMixin(object):
