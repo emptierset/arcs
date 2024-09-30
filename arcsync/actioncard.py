@@ -41,6 +41,7 @@ class ActionCardDeck(Deck[ActionCard]):
             super().__init__(basic_4p_cards)
         else:
             raise ValueError(f"only 2, 3, and 4 player games are supported, not {player_count}")
+        self.shuffle()
 
 
 @typing.final
