@@ -29,11 +29,15 @@ class Slot(DunderDictReprMixin):
 class Player(DunderDictReprMixin):
     color: Final[Color]
 
-    # TODO(base): make most of these private.
+    # TODO(base): make most of these private and final.
 
     hand: MutableSequence[ActionCard]
     tableau: MutableSequence[GuildCard]
     slots: Sequence[Slot]
+    # TODO(base): Add some holding area for excess resources during rearrange.
+    # excess: Final[list[Resource]]
+
+    power: int
 
     ships: int
     agents: int
@@ -61,10 +65,46 @@ class Player(DunderDictReprMixin):
             Slot(SlotRaidCost(3)),
         ]
 
+        self.power = 0
+
         self.ships = 15
         self.agents = 10
         self.starports = 5
         self.cities = 5
+
+    def count_for_ambition(self, ambition: Ambition) -> int:
+        match ambition:
+            case Ambition.TYCOON:
+                return (
+                    self._count_resources_of_type(Resource.MATERIAL)
+                    + self._count_resources_of_type(Resource.FUEL)
+                    + self._count_guild_cards_of_suit(GuildCardSuit.MATERIAL)
+                    + self._count_guild_cards_of_suit(GuildCardSuit.FUEL)
+                )
+            case Ambition.EDENGUARD:  # pragma: no cover
+                raise NotImplementedError()
+            case Ambition.TYRANT:
+                raise NotImplementedError()
+            case Ambition.WARLORD:
+                raise NotImplementedError()
+            case Ambition.KEEPER:
+                return self._count_resources_of_type(
+                    Resource.RELIC
+                ) + self._count_guild_cards_of_suit(GuildCardSuit.RELIC)
+            case Ambition.EMPATH:
+                return self._count_resources_of_type(
+                    Resource.PSIONIC
+                ) + self._count_guild_cards_of_suit(GuildCardSuit.PSIONIC)
+            case Ambition.BLIGHTKIN:  # pragma: no cover
+                raise NotImplementedError()
+            case _ as unreachable:  # pragma: no cover
+                assert_never(unreachable)
+
+    def _count_resources_of_type(self, resource: Resource) -> int:
+        return sum(1 for s in self.slots if s.contents == resource)
+
+    def _count_guild_cards_of_suit(self, suit: GuildCardSuit) -> int:
+        return sum(1 for card in self.tableau if card.suit == suit)
 
     def hit_piece(self, p: DamageablePiece, num_hits: int = 1) -> None:
         arcsync.piece.hit(self.color, p, num_hits=num_hits)
