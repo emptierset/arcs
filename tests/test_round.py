@@ -1,7 +1,6 @@
 import typing
 from collections.abc import Sequence
-from typing import Any, Callable
-from unittest.mock import Mock
+from unittest.mock import Mock, call
 
 from pytest import fixture, raises
 from pytest_mock import MockerFixture
@@ -10,7 +9,7 @@ from statemachine.exceptions import TransitionNotAllowed
 from arcsync.actioncard import ActionCard
 from arcsync.ambition import Ambition
 from arcsync.color import Color
-from arcsync.event import AmbitionDeclaredEvent, InitiativeGainedEvent
+from arcsync.event import AmbitionDeclaredEvent, InitiativeGainedEvent, RoundCompleteEvent
 from arcsync.play import Copy, CouldNotFollow, Follow, Lead, PassInitiative, Pivot, Surpass
 from arcsync.round import Round, Step
 from tests.helpers import defaults, testcase
@@ -21,6 +20,8 @@ from tests.helpers.autostatic import Autostatic
 # There aren't that many errors under that code, so it shouldn't cause significant false negatives.
 #
 # I don't know how to avoid casting things to mocks, though...
+# TODO(cleanup): We can probably avoid these casts with a MockEventBus and using dependency
+# injection (need to add that to the constructor for Game).
 #
 # mypy: disable-error-code="misc"
 
@@ -108,6 +109,11 @@ class TestBeginTurn(metaclass=Autostatic):
         #        r_lead_const2.begin_turn(Lead(player2, action_card))
 
     class TestPassInitiative(metaclass=Autostatic):
+        def test_pass_initiative_sets_lead_play(r: Round, pass_initiative: PassInitiative) -> None:
+            assert r._lead_play is None
+            r.begin_turn(pass_initiative)
+            assert r._lead_play == pass_initiative
+
         def test_round_complete(r: Round, pass_initiative: PassInitiative) -> None:
             assert not r.complete
             r.begin_turn(pass_initiative)
@@ -117,8 +123,11 @@ class TestBeginTurn(metaclass=Autostatic):
             r: Round, pass_initiative: PassInitiative, player2: Color
         ) -> None:
             r.begin_turn(pass_initiative)
-            typing.cast(Mock, r._event_bus.publish).assert_called_once_with(
-                InitiativeGainedEvent(player2),
+            typing.cast(Mock, r._event_bus.publish).assert_has_calls(
+                [
+                    call(InitiativeGainedEvent(player2)),
+                    call(RoundCompleteEvent()),
+                ]
             )
 
         # TODO(base): Does this test actually test anything interesting now that we use
@@ -180,7 +189,7 @@ class TestBeginTurn(metaclass=Autostatic):
         )
         def test_pips(r_lead_const2: Round, play: Follow, want_pips: int) -> None:
             r_lead_const2.begin_turn(play)
-            typing.cast(Callable[..., Any], r_lead_const2.end_prelude)()
+            r_lead_const2.end_prelude()
             assert r_lead_const2.pips_remaining == want_pips
 
     class TestSurpass(metaclass=Autostatic):
