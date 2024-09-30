@@ -1,7 +1,8 @@
+import dataclasses
 import enum
 import typing
-from collections.abc import Mapping
 from typing import Final
+from collections.abc import Mapping
 
 from arcsync.card import Card, Deck
 
@@ -21,16 +22,12 @@ Rank = int
 Pips = int
 
 
-@typing.final
+@dataclasses.dataclass(frozen=True)
 class ActionCard(Card):
     suit: Suit
+    _: dataclasses.KW_ONLY
     rank: Rank
     pips: Pips
-
-    def __init__(self, suit: Suit, *, rank: Rank, pips: Pips) -> None:
-        self.suit = suit
-        self.rank = rank
-        self.pips = pips
 
 
 # TODO(campaign): Event cards.
