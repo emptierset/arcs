@@ -12,7 +12,11 @@ from .transition_list import TransitionList as TransitionList
 from enum import Enum
 from typing import Any
 from typing import TypeVar, Generic, Callable
+from typing_extensions import ParamSpec
 from collections.abc import Sequence, Iterable
+
+P = ParamSpec("P")
+T = TypeVar("T")
 
 # from typing import Any
 # def __getattr__(name: str) -> Any: ...
@@ -22,8 +26,10 @@ class State:
     # name: str
     value: Any
     # transitions: TransitionList
-    # enter: SpecListGrouper
-    # exit: SpecListGrouper
+    # NOTE: `enter` and `exit` are of type SpecListGrouper during state initialization, but they
+    # are decorating functions by the time our subclass is initialized.
+    enter: Callable[[Callable[P, T]], Callable[P, T]]
+    exit: Callable[[Callable[P, T]], Callable[P, T]]
     # def __init__(
     #    self,
     #    name: str = "",
