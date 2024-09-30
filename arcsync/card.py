@@ -27,7 +27,7 @@ class Deck(Generic[CardT]):
         random.shuffle(to_shuffle)
         self._cards = collections.deque(to_shuffle)
 
-    def shuffle_cards_into(self, cards: Collection[CardT]) -> None:
+    def add(self, cards: Collection[CardT]) -> None:
         self._cards.extend(cards)
         self.shuffle()
 
