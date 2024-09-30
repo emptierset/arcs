@@ -33,6 +33,9 @@ class ActionCardPlay(Protocol):
     @property
     def pips(self) -> int: ...
 
+    @property
+    def _card(self) -> ActionCard: ...
+
 
 @dataclasses.dataclass(frozen=True)
 class Play(object, metaclass=abc.ABCMeta):
