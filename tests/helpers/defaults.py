@@ -11,10 +11,10 @@ multipip_card: ActionCard = ADMIN[3]
 action_card: ActionCard = AGGRE[4]
 other_action_card: ActionCard = CONST[5]
 
-player1: Color = Color.WHITE
+player1: Color = Color.YELLOW
 player2: Color = Color.BLUE
-player3: Color = Color.RED
-player4: Color = Color.YELLOW
+player3: Color = Color.WHITE
+player4: Color = Color.RED
 
 color: Color = player3
 

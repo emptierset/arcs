@@ -3,6 +3,7 @@ from typing import Any, Callable
 
 from pytest import fixture, raises
 
+import arcsync.setupcard
 from arcsync.actioncard import ActionCard
 from arcsync.ambition import Ambition
 from arcsync.color import Color
@@ -64,7 +65,8 @@ def _pivot(
 def g() -> Game:
     random.seed(a=2)  # maps to desired turn order
     game = Game(player_count=4)
-    game.setup()
+    game.setup(arcsync.setupcard.four_player_setup_cards[0], [])
+    random.seed(a=2)  # prevent setup changes from affecting subsequent randomness
     return game
 
 

@@ -1,17 +1,17 @@
 import random
 import typing
-from collections.abc import Mapping, MutableSequence, MutableSet, Sequence
+from collections.abc import Collection, Mapping, MutableSequence, MutableSet, Sequence
 from enum import Enum
 from typing import Any, Callable, Final
 
 from statemachine import State
 from statemachine.transition_list import TransitionList
 
-import arcsync.setupcard
 from arcsync.actioncard import ActionCard, ActionCardDeck, ActionCardDiscard
 from arcsync.ambition import Ambition, AmbitionManager, Power
 from arcsync.color import Color
 from arcsync.court import Court
+from arcsync.courtcard import CourtCard
 from arcsync.event import InitiativeGainedEvent, RoundCompleteEvent
 from arcsync.eventbus import EventBus
 from arcsync.helpers.enumstatemachine import EnumStateMachine, EnumStates
@@ -107,7 +107,7 @@ class Game(EnumStateMachine[Phase]):
     setup: AnyFunc = s.INIT.to(s.SETUP)
 
     @s.SETUP.enter
-    def _setup_game(self) -> None:
+    def _setup_game(self, setup_card: SetupCard, court_deck: Collection[CourtCard]) -> None:
         self.chapter = 1
         self.winner = None
 
@@ -119,18 +119,10 @@ class Game(EnumStateMachine[Phase]):
         # TODO(base): Remove this try/catch when we have actual court cards to put in. Add a sanity
         # check assertion to tests too.
         try:
-            self.court = Court([], num_slots=4)
+            self.court = Court(court_deck, num_slots=4)
         except ValueError:
             pass
 
-        # TODO(base): Allow setup card to be specified?
-        setup_cards: Sequence[SetupCard]
-        if self._player_count == 4:
-            setup_cards = arcsync.setupcard.four_player_setup_cards
-        elif self._player_count == 3:
-            setup_cards = arcsync.setupcard.three_player_setup_cards
-        # TODO(base2p): 2p setup cards.
-        setup_card: SetupCard = random.choice(setup_cards)
         self.reach = Reach(setup_card)
 
         # Randomly assign player colors and initiative.
