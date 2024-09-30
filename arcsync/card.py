@@ -58,6 +58,9 @@ class Deck(Generic[CardT]):
             cs.append(self._cards.pop())
         return cs
 
+    def draw_all(self) -> list[CardT]:
+        return self.draw(len(self))
+
 
 if __name__ == "__main__":
     pass
