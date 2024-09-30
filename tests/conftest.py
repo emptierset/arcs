@@ -3,8 +3,10 @@ from collections.abc import Sequence
 from pytest import fixture
 
 from arcsync.actioncard import ActionCard
+from arcsync.ambition import Ambition
 from arcsync.color import Color
 from arcsync.play import Lead, PassInitiative, Play, Surpass
+from arcsync.resource import Resource
 from tests.helpers import defaults
 
 
@@ -71,3 +73,13 @@ def pass_initiative() -> PassInitiative:
 @fixture
 def surpass() -> Surpass:
     return defaults.surpass
+
+
+@fixture
+def resource() -> Resource:
+    return defaults.resource
+
+
+@fixture
+def ambition() -> Ambition:
+    return defaults.ambition
