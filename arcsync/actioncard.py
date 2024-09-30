@@ -1,8 +1,8 @@
 import dataclasses
 import enum
 import typing
-from typing import Final
 from collections.abc import Mapping
+from typing import Final
 
 from arcsync.card import Card, Deck
 
@@ -90,65 +90,60 @@ basic_cards: Final[Mapping[Suit, Mapping[Rank, ActionCard]]] = {
 }
 
 
-# TODO(base): Make this a Collection.
-basic_2_3p_cards: Final[frozenset[ActionCard]] = frozenset(
-    [
-        basic_cards[Suit.ADMINISTRATION][2],
-        basic_cards[Suit.ADMINISTRATION][3],
-        basic_cards[Suit.ADMINISTRATION][4],
-        basic_cards[Suit.ADMINISTRATION][5],
-        basic_cards[Suit.ADMINISTRATION][6],
-        basic_cards[Suit.CONSTRUCTION][2],
-        basic_cards[Suit.CONSTRUCTION][3],
-        basic_cards[Suit.CONSTRUCTION][4],
-        basic_cards[Suit.CONSTRUCTION][5],
-        basic_cards[Suit.CONSTRUCTION][6],
-        basic_cards[Suit.MOBILIZATION][2],
-        basic_cards[Suit.MOBILIZATION][3],
-        basic_cards[Suit.MOBILIZATION][4],
-        basic_cards[Suit.MOBILIZATION][5],
-        basic_cards[Suit.MOBILIZATION][6],
-        basic_cards[Suit.AGGRESSION][2],
-        basic_cards[Suit.AGGRESSION][3],
-        basic_cards[Suit.AGGRESSION][4],
-        basic_cards[Suit.AGGRESSION][5],
-        basic_cards[Suit.AGGRESSION][6],
-    ]
-)
+basic_2_3p_cards: Final[list[ActionCard]] = [
+    basic_cards[Suit.ADMINISTRATION][2],
+    basic_cards[Suit.ADMINISTRATION][3],
+    basic_cards[Suit.ADMINISTRATION][4],
+    basic_cards[Suit.ADMINISTRATION][5],
+    basic_cards[Suit.ADMINISTRATION][6],
+    basic_cards[Suit.CONSTRUCTION][2],
+    basic_cards[Suit.CONSTRUCTION][3],
+    basic_cards[Suit.CONSTRUCTION][4],
+    basic_cards[Suit.CONSTRUCTION][5],
+    basic_cards[Suit.CONSTRUCTION][6],
+    basic_cards[Suit.MOBILIZATION][2],
+    basic_cards[Suit.MOBILIZATION][3],
+    basic_cards[Suit.MOBILIZATION][4],
+    basic_cards[Suit.MOBILIZATION][5],
+    basic_cards[Suit.MOBILIZATION][6],
+    basic_cards[Suit.AGGRESSION][2],
+    basic_cards[Suit.AGGRESSION][3],
+    basic_cards[Suit.AGGRESSION][4],
+    basic_cards[Suit.AGGRESSION][5],
+    basic_cards[Suit.AGGRESSION][6],
+]
 
 
-basic_4p_cards: Final[frozenset[ActionCard]] = frozenset(
-    [
-        basic_cards[Suit.ADMINISTRATION][1],
-        basic_cards[Suit.ADMINISTRATION][2],
-        basic_cards[Suit.ADMINISTRATION][3],
-        basic_cards[Suit.ADMINISTRATION][4],
-        basic_cards[Suit.ADMINISTRATION][5],
-        basic_cards[Suit.ADMINISTRATION][6],
-        basic_cards[Suit.ADMINISTRATION][7],
-        basic_cards[Suit.CONSTRUCTION][1],
-        basic_cards[Suit.CONSTRUCTION][2],
-        basic_cards[Suit.CONSTRUCTION][3],
-        basic_cards[Suit.CONSTRUCTION][4],
-        basic_cards[Suit.CONSTRUCTION][5],
-        basic_cards[Suit.CONSTRUCTION][6],
-        basic_cards[Suit.CONSTRUCTION][7],
-        basic_cards[Suit.MOBILIZATION][1],
-        basic_cards[Suit.MOBILIZATION][2],
-        basic_cards[Suit.MOBILIZATION][3],
-        basic_cards[Suit.MOBILIZATION][4],
-        basic_cards[Suit.MOBILIZATION][5],
-        basic_cards[Suit.MOBILIZATION][6],
-        basic_cards[Suit.MOBILIZATION][7],
-        basic_cards[Suit.AGGRESSION][1],
-        basic_cards[Suit.AGGRESSION][2],
-        basic_cards[Suit.AGGRESSION][3],
-        basic_cards[Suit.AGGRESSION][4],
-        basic_cards[Suit.AGGRESSION][5],
-        basic_cards[Suit.AGGRESSION][6],
-        basic_cards[Suit.AGGRESSION][7],
-    ]
-)
+basic_4p_cards: Final[list[ActionCard]] = [
+    basic_cards[Suit.ADMINISTRATION][1],
+    basic_cards[Suit.ADMINISTRATION][2],
+    basic_cards[Suit.ADMINISTRATION][3],
+    basic_cards[Suit.ADMINISTRATION][4],
+    basic_cards[Suit.ADMINISTRATION][5],
+    basic_cards[Suit.ADMINISTRATION][6],
+    basic_cards[Suit.ADMINISTRATION][7],
+    basic_cards[Suit.CONSTRUCTION][1],
+    basic_cards[Suit.CONSTRUCTION][2],
+    basic_cards[Suit.CONSTRUCTION][3],
+    basic_cards[Suit.CONSTRUCTION][4],
+    basic_cards[Suit.CONSTRUCTION][5],
+    basic_cards[Suit.CONSTRUCTION][6],
+    basic_cards[Suit.CONSTRUCTION][7],
+    basic_cards[Suit.MOBILIZATION][1],
+    basic_cards[Suit.MOBILIZATION][2],
+    basic_cards[Suit.MOBILIZATION][3],
+    basic_cards[Suit.MOBILIZATION][4],
+    basic_cards[Suit.MOBILIZATION][5],
+    basic_cards[Suit.MOBILIZATION][6],
+    basic_cards[Suit.MOBILIZATION][7],
+    basic_cards[Suit.AGGRESSION][1],
+    basic_cards[Suit.AGGRESSION][2],
+    basic_cards[Suit.AGGRESSION][3],
+    basic_cards[Suit.AGGRESSION][4],
+    basic_cards[Suit.AGGRESSION][5],
+    basic_cards[Suit.AGGRESSION][6],
+    basic_cards[Suit.AGGRESSION][7],
+]
 
 if __name__ == "__main__":
     pass
