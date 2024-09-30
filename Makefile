@@ -57,7 +57,7 @@ fmt: isort black autoflake
 ## flake: Run flake8 linter.
 .PHONY: flake
 flake:
-	$(ENV_PREFIX)flake8 --max-line-length 99 $(SRC_DIRECTORIES)
+	$(ENV_PREFIX)flake8 --extend-ignore=E203 --max-line-length 99 $(SRC_DIRECTORIES)
 
 ## lint: Run pep8 linter and black checker.
 .PHONY: lint
