@@ -27,6 +27,10 @@ class InitiativeGainedEvent(Event):
     player: "Color"
 
 
+class RoundCompleteEvent(Event):
+    pass
+
+
 @dataclasses.dataclass(frozen=True)
 class PlayerDestroyedPieceEvent(Event):
     player: "Color"
