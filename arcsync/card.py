@@ -22,6 +22,14 @@ class Deck(Generic[CardT]):
     def __len__(self) -> int:
         return len(self._cards)
 
+    # Not interesting for base game, but a nontrivial part of campaign strategy is seeing the
+    # cardback for the card on top of the deck.
+    def peek_top(self) -> CardT:
+        if not self._cards:
+            raise ValueError("Cannot peek the top card of an empty deck.")
+        # 0 is the correct index (not -1), because `draw` uses `popleft`, not `pop`.
+        return self._cards[0]
+
     def shuffle(self) -> None:
         to_shuffle = list(self._cards)
         random.shuffle(to_shuffle)
