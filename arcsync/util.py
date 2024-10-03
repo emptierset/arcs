@@ -10,7 +10,7 @@ from typing_extensions import Self
 
 
 # TODO(base): Update to Python 3.11 so we can just import this from typing.
-def assert_never(value: NoReturn) -> NoReturn:
+def assert_never(value: NoReturn) -> NoReturn:  # pragma: no cover
     assert False, f"Unhandled value: {value} ({type(value).__name__})"
 
 
