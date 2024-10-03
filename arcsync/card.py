@@ -1,5 +1,6 @@
 import collections
 import random
+import typing
 from collections.abc import Collection
 from typing import Generic, TypeVar
 
@@ -42,29 +43,42 @@ class Deck(Generic[CardT]):
     def put_on_top(self, card: CardT) -> None:
         self._cards.appendleft(card)
 
-    def draw(self, num: int = 1) -> list[CardT]:
+    @typing.overload
+    def draw(self) -> CardT: ...
+
+    @typing.overload
+    def draw(self, num: int) -> list[CardT]: ...
+
+    def draw(self, num: int | None = None) -> list[CardT] | CardT:
+        if num is None:
+            num = 1
         if len(self._cards) < num:
             raise ValueError(
                 f"Cannot draw {num} cards from a deck with only {len(self._cards)} cards."
             )
-        cs: list[CardT] = []
-        for _ in range(num):
-            cs.append(self._cards.popleft())
-        return cs
+        if num == 1:
+            return self._cards.popleft()
+        return [self._cards.popleft() for _ in range(num)]
 
     def put_on_bottom(self, card: CardT) -> None:
         self._cards.append(card)
 
-    def draw_from_bottom(self, num: int = 1) -> list[CardT]:
+    @typing.overload
+    def draw_from_bottom(self) -> CardT: ...
+
+    @typing.overload
+    def draw_from_bottom(self, num: int) -> list[CardT]: ...
+
+    def draw_from_bottom(self, num: int | None = None) -> list[CardT] | CardT:
+        if num is None:
+            num = 1
         if len(self._cards) < num:
             raise ValueError(
-                f"Cannot draw {num} cards from the bottom of a deck with only "
-                f"{len(self._cards)} cards."
+                f"Cannot draw {num} cards from bottom of deck with only {len(self._cards)} cards."
             )
-        cs: list[CardT] = []
-        for _ in range(num):
-            cs.append(self._cards.pop())
-        return cs
+        if num == 1:
+            return self._cards.pop()
+        return [self._cards.pop() for _ in range(num)]
 
     def draw_all(self) -> list[CardT]:
         return self.draw(len(self))
