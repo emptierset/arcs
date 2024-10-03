@@ -29,6 +29,9 @@ class ActionCard(Card):
     rank: Rank
     pips: Pips
 
+    def __repr__(self) -> str:
+        return f"ActionCard({self.suit.name}, {self.rank})"
+
 
 # TODO(campaign): Event cards.
 
