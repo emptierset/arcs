@@ -119,12 +119,7 @@ class Game(EnumStateMachine[Phase]):
         self.action_card_deck = ActionCardDeck(player_count=self._player_count)
         self.action_card_discard = ActionCardDiscard()
 
-        # TODO(base): Remove this try/catch when we have actual court cards to put in. Add a sanity
-        # check assertion to tests too.
-        try:
-            self.court = Court(court_deck, num_slots=4)
-        except ValueError:
-            pass
+        self.court = Court(court_deck, num_slots=4)
 
         self.reach = Reach(setup_card)
 

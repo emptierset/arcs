@@ -3,6 +3,7 @@ from typing import Any, Callable
 
 from pytest import fixture, raises
 
+import arcsync.courtcards.basecourt
 import arcsync.setupcard
 from arcsync.actioncard import ActionCard
 from arcsync.ambition import Ambition
@@ -63,11 +64,14 @@ def _pivot(
 
 @fixture
 def g() -> Game:
-    random.seed(a=2)  # maps to desired turn order
-    game = Game(player_count=4)
-    game.setup(arcsync.setupcard.four_player_setup_cards[0], [])
-    random.seed(a=2)  # prevent setup changes from affecting subsequent randomness
-    return game
+    # TODO(cleanup): mock all of the random calls. Seed is still a pain in the ass.
+    _game = Game(player_count=4, seed=2)
+    # TODO(base): Add a sanity check assertion about deck size to tests.
+    _game.setup(
+        arcsync.setupcard.four_player_setup_cards[0],
+        arcsync.courtcards.basecourt.cards,
+    )
+    return _game
 
 
 @fixture
