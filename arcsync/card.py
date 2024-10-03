@@ -17,7 +17,9 @@ CardT = TypeVar("CardT", bound=Card)
 class Deck(Generic[CardT]):
     _cards: collections.deque[CardT]
 
-    def __init__(self, cards: Collection[CardT]) -> None:
+    def __init__(self, cards: Collection[CardT], seed: int | None = None) -> None:
+        if seed is not None:
+            random.seed(seed)
         self._cards = collections.deque(cards)
 
     def __len__(self) -> int:

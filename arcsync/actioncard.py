@@ -37,11 +37,11 @@ class ActionCard(Card):
 
 
 class ActionCardDeck(Deck[ActionCard]):
-    def __init__(self, *, player_count: int) -> None:
+    def __init__(self, *, player_count: int, seed: int | None = None) -> None:
         if 2 <= player_count <= 3:
-            super().__init__(basic_2_3p_cards)
+            super().__init__(basic_2_3p_cards, seed=seed)
         elif player_count == 4:
-            super().__init__(basic_4p_cards)
+            super().__init__(basic_4p_cards, seed=seed)
         else:
             raise ValueError(f"only 2, 3, and 4 player games are supported, not {player_count}")
         self.shuffle()
