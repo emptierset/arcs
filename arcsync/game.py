@@ -64,7 +64,10 @@ class Game(EnumStateMachine[Phase]):
             current_index = (current_index + 1) % self._player_count
         return order
 
-    def __init__(self, *, player_count: int) -> None:
+    def __init__(self, *, player_count: int, seed: int | None = None) -> None:
+        if seed is not None:
+            random.seed(seed)
+
         if player_count < 3 or player_count > 4:
             raise ValueError(f"Only player counts 3 and 4 are supported, not {player_count}.")
         self._player_count = player_count
