@@ -11,13 +11,15 @@ from arcsync.actioncard import ActionCard, ActionCardDeck, ActionCardDiscard
 from arcsync.ambition import Ambition, AmbitionManager, Power
 from arcsync.color import Color
 from arcsync.court import Court
-from arcsync.courtcard import CourtCard
+from arcsync.court import SlotKey as CourtSlotKey
+from arcsync.courtcard import CourtCard, GuildCard, VoxCard
 from arcsync.event import InitiativeGainedEvent, RoundCompleteEvent
 from arcsync.eventbus import EventBus
 from arcsync.helpers.enumstatemachine import EnumStateMachine, EnumStates
+from arcsync.piece import Agent, MapPiece, Piece, PlayerPiece
 from arcsync.play import Copy, CouldNotFollow, Lead, PassInitiative, Pivot, Surpass
 from arcsync.player import Player
-from arcsync.reach import Reach
+from arcsync.reach import Reach, SystemID
 from arcsync.round import Round
 from arcsync.setupcard import SetupCard
 
@@ -78,8 +80,6 @@ class Game(EnumStateMachine[Phase]):
 
         self._event_bus = EventBus()
 
-        # Initialize event handlers below this.
-
         def handle_initiative_gained_event(e: InitiativeGainedEvent) -> None:
             self.initiative = e.player
 
@@ -93,6 +93,8 @@ class Game(EnumStateMachine[Phase]):
         self._event_bus.subscribe(RoundCompleteEvent, handle_round_complete_event)
 
     # State machine logic
+    # TODO(base): Make the current round being complete a `cond` for any transition that goes from
+    # PLAY_A_ROUND to CHAPTER_END.
 
     s = EnumStates[Phase](Phase, Phase.INIT, final=Phase.GAME_END)
 
@@ -307,6 +309,7 @@ class Game(EnumStateMachine[Phase]):
                 self._score_ambition(ambition)
 
     def _score_ambition(self, ambition: Ambition) -> None:
+        # TODO(base): Return trophies on Warlord and captives on Tyrant.
         ranking = self._rank_players(ambition)
         for color, rank in ranking.items():
             if rank == 1:
@@ -345,7 +348,8 @@ class Game(EnumStateMachine[Phase]):
                 and ambition_counts[ranking[left]] == ambition_counts[ranking[right + 1]]
             ):
                 right += 1
-            if left == right:
+            one_player_has_the_most_towards_ambition = left == right
+            if one_player_has_the_most_towards_ambition:
                 # If only one player has a unique count towards the ambition, their rank is the
                 # current rank and the next player(s) are at least one rank lower.
                 player_to_rank[ranking[left]] = current_rank
@@ -354,7 +358,7 @@ class Game(EnumStateMachine[Phase]):
                 current_rank += 1
             else:
                 # If more one player shares count towards the ambition, they all have the rank
-                # below the current rank.
+                # below the current rank, and no one has the current rank.
                 current_rank += 1
                 for color in ranking[left : right + 1]:
                     player_to_rank[color] = current_rank
@@ -362,6 +366,79 @@ class Game(EnumStateMachine[Phase]):
                 right += 1
         return player_to_rank
 
+    # Piece management
 
-if __name__ == "__main__":
-    g = Game(player_count=4)
+    def return_piece(self, piece: Piece) -> None:
+        if isinstance(piece, PlayerPiece):
+            self.players[piece.loyalty].receive_returned_piece(piece)
+        else:
+            raise ValueError(f"Do not know how to return_piece({piece}).")
+
+    # Actions
+
+    def influence(self, acting_player: Color, key: CourtSlotKey) -> None:
+        self.court.add_agents(acting_player, key, num_agents=1)
+
+    def secure(self, acting_player: Color, key: CourtSlotKey) -> None:
+        # This isn't a valid secure unless the securing player has more agents that each other
+        # player on the card.
+        # TODO(campaign): Effects can modify this. e.g. Spirit of Freedom
+        card = self.court.card(key)
+        agents = self.court.agents_on_card(key)
+        for other in self.players:
+            if other != acting_player:
+                if agents[other] >= agents[acting_player]:
+                    raise ValueError(
+                        f"Cannot secure card keyed by {key} because securing player"
+                        f" ({acting_player}) does not have more agents on the card"
+                        f" ({agents[acting_player]}) than other player ({other}) has on the card"
+                        f" ({agents[other]})."
+                    )
+
+        # 1. Resolve When Secured action, if any.
+        # TODO(base): Actually do this. For now, it is manual.
+        # card.when_secured(self.players[acting_player])
+
+        # 2. Take the card (unless overridden).
+        # TODO(base): Vox cards aren't taken, and normally (always, in base game...?) send
+        # themselves somewhere else instead.
+        # TODO(L&L): Lore is taken, just like Guild Cards. Maybe once we implement Lore, Guild and
+        # Lore cards will share some common subclass.
+        card, taken_agents = self.court.take_card(key)
+        if isinstance(card, GuildCard):
+            self.players[acting_player].acquire_card(card)
+        elif isinstance(card, VoxCard):
+            self.court.discard_pile.put_on_top(card)
+
+        # 3. Return/capture agents as necessary (unless overridden).
+        # TODO(campaign): Effects can modify this. e.g. Dealmakers, Planet Eater Loose
+        for agents_color, num_agents in taken_agents.items():
+            for _ in range(num_agents):
+                if agents_color == acting_player:
+                    self.players[acting_player].receive_returned_piece(Agent(agents_color))
+                else:
+                    self.players[acting_player].capture(Agent(agents_color))
+
+        # 4. Refill the Court.
+        # TODO(base): Once secure is automated, we can automatically refill the court. For now, it
+        # has to be done automatically because When Secured decisions need to be made before seeing
+        # the next court card.
+        # self._event_bus.publish(CourtRefillNeededEvent())
+
+    def move(
+        self, acting_player: Color, src: SystemID, dest: SystemID, pieces: Collection[MapPiece]
+    ) -> None:
+        pass
+
+    def battle(self, acting_player: Color, defender: Color, system: SystemID) -> None:
+        pass
+
+    def repair(self, acting_player: Color, piece: MapPiece) -> None:
+        pass
+
+    def build(self, acting_player: Color, system: SystemID, piece_type: type[MapPiece]) -> None:
+        pass
+
+
+if __name__ == "__main__":  # pragma: no cover
+    pass

@@ -13,5 +13,5 @@ class NonPlayerEntity(enum.Enum):
 Entity = Color | NonPlayerEntity
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     pass

@@ -84,6 +84,8 @@ cov:
 	$(ENV_PREFIX)coverage xml
 	$(ENV_PREFIX)coverage html
 
+# TODO(cleanup): The output of this is a bit ugly when you have a ton of tests. Maybe check the
+# flags and see what we can fiddle with.
 ## test: Run tests and generate coverage report.
 .PHONY: test
 test:

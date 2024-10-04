@@ -30,6 +30,7 @@ class MapPiece(Piece):
     pass
 
 
+@typing.runtime_checkable
 class PlayerPiece(Protocol):
     @property
     def loyalty(self) -> Color: ...
@@ -111,5 +112,5 @@ def hit(culprit: Entity, p: DamageablePiece, *, num_hits: int = 1) -> None:
                 break
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     pass

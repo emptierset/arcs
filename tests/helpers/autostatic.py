@@ -9,6 +9,8 @@ def nonstaticmethod(f: Callable[..., Any]) -> Callable[..., Any]:
     return f
 
 
+# TODO(cleanup): it might be evil, but we could probably manipulate __anotations__ (or whatever
+# it's called) to annotate every "test_.*" method with a `-> None` return type.
 class Autostatic(type):
     """Decorate all instance methods (unless excluded) with @staticmethod."""
 

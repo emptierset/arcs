@@ -1,4 +1,3 @@
-import random
 from typing import Any, Callable
 
 from pytest import fixture, raises
@@ -9,8 +8,9 @@ from arcsync.actioncard import ActionCard
 from arcsync.ambition import Ambition
 from arcsync.color import Color
 from arcsync.game import Game
+from arcsync.piece import Ship
 from arcsync.resource import Resource
-from tests.helpers.actioncard_shorthand import ADMIN, AGGRE, CONST
+from tests.helpers.actioncard_shorthand import ADMIN, CONST, MOBIL
 from tests.helpers.autostatic import Autostatic
 
 # misc: Mypy can't figure out that Autostatic makes `self` unnecessary, so we just turn off "misc".
@@ -21,45 +21,6 @@ from tests.helpers.autostatic import Autostatic
 # mypy: disable-error-code="misc"
 
 AnyFunc = Callable[..., Any]
-
-
-def _lead(g: Game, player: Color, card: ActionCard, ambition: Ambition | None = None) -> None:
-    g.lead(player, card, ambition=ambition)
-    g.end_prelude()
-    g.end_pips()
-
-
-def _surpass(
-    g: Game,
-    player: Color,
-    card: ActionCard,
-    seize_card: ActionCard | None = None,
-) -> None:
-    g.surpass(player, card, seize_card=seize_card)
-    g.end_prelude()
-    g.end_pips()
-
-
-def _copy(
-    g: Game,
-    player: Color,
-    card: ActionCard,
-    seize_card: ActionCard | None = None,
-) -> None:
-    g.copy(player, card, seize_card=seize_card)
-    g.end_prelude()
-    g.end_pips()
-
-
-def _pivot(
-    g: Game,
-    player: Color,
-    card: ActionCard,
-    seize_card: ActionCard | None = None,
-) -> None:
-    g.pivot(player, card, seize_card=seize_card)
-    g.end_prelude()
-    g.end_pips()
 
 
 @fixture
@@ -104,48 +65,71 @@ def test_turn_order_changes_on_round_completion(
 ) -> None:
     assert g.turn_order == [player1, player2, player3, player4]
 
-    _lead(g, player1, ADMIN[4])
-    _surpass(g, player2, ADMIN[5])
-    _pivot(g, player3, CONST[6])
-    _copy(g, player4, ADMIN[7])
+    g.lead(player1, ADMIN[1])
+    g.end_prelude()
+    g.end_pips()
 
-    assert g.turn_order == [player2, player3, player4, player1]
+    g.surpass(player2, ADMIN[5])
+    g.end_prelude()
+    g.end_pips()
+
+    g.pivot(player3, MOBIL[5])
+    g.end_prelude()
+    g.end_pips()
+
+    g.copy(player4, ADMIN[6])
+    g.end_prelude()
+    g.end_pips()
+
+    got_turn_order = g.turn_order
+    assert got_turn_order == [player2, player3, player4, player1]
 
 
 class TestCardPlay(metaclass=Autostatic):
-    def test_cannot_lead_card_not_in_hand(
-        g: Game,
-        player1: Color,
-    ) -> None:
-        with raises(ValueError, match=f"not in {player1}'s hand"):
-            _lead(g, player1, CONST[6])
+    def test_cannot_lead_card_not_in_hand(g: Game, player1: Color) -> None:
+        with raises(ValueError, match="Cannot lead"):
+            g.lead(player1, ADMIN[5])
 
-    def test_cannot_surpass_with_card_not_in_hand(
-        g: Game,
-        player1: Color,
-        player2: Color,
+    def test_cannot_follow_due_to_lack_of_cards(
+        g: Game, player1: Color, player2: Color, player3: Color
     ) -> None:
-        _lead(g, player1, ADMIN[4])
-        with raises(ValueError, match=f"not in {player2}'s hand"):
-            _surpass(g, player2, ADMIN[6])
+        g.lead(player1, ADMIN[1])
+        g.end_prelude()
+        g.end_pips()
+        g.cannot_follow_due_to_lack_of_cards(player2)
+        g.pivot(player3, MOBIL[5])
 
-    def test_cannot_copy_with_card_not_in_hand(
-        g: Game,
-        player1: Color,
-        player2: Color,
-    ) -> None:
-        _lead(g, player1, ADMIN[4])
-        with raises(ValueError, match=f"not in {player2}'s hand"):
-            _copy(g, player2, ADMIN[6])
+    def test_cannot_surpass_with_card_not_in_hand(g: Game, player1: Color, player2: Color) -> None:
+        g.lead(player1, ADMIN[1])
+        g.end_prelude()
+        g.end_pips()
+        with raises(ValueError, match="Cannot follow"):
+            g.surpass(player2, ADMIN[6])
+            g.end_prelude()
+            g.end_pips()
 
-    def test_cannot_pivot_with_card_not_in_hand(
-        g: Game,
-        player1: Color,
-        player2: Color,
-    ) -> None:
-        _lead(g, player1, ADMIN[4])
-        with raises(ValueError, match=f"not in {player2}'s hand"):
-            _pivot(g, player2, AGGRE[1])
+    def test_cannot_copy_with_card_not_in_hand(g: Game, player1: Color, player2: Color) -> None:
+        g.lead(player1, ADMIN[1])
+        g.end_prelude()
+        g.end_pips()
+        with raises(ValueError, match="Cannot follow"):
+            g.copy(player2, ADMIN[6])
+
+    def test_cannot_pivot_with_card_not_in_hand(g: Game, player1: Color, player2: Color) -> None:
+        g.lead(player1, ADMIN[1])
+        g.end_prelude()
+        g.end_pips()
+        with raises(ValueError, match="Cannot follow"):
+            g.pivot(player2, MOBIL[5])
+
+    def test_cannot_seize_with_card_not_in_hand(g: Game, player1: Color, player2: Color) -> None:
+        g.lead(player1, ADMIN[1])
+        g.end_prelude()
+        g.end_pips()
+        with raises(ValueError, match="Cannot seize"):
+            g.surpass(player2, ADMIN[5], seize_card=MOBIL[5])
+            g.end_prelude()
+            g.end_pips()
 
 
 class TestAdvanceChapter(metaclass=Autostatic):
@@ -176,16 +160,33 @@ class TestAdvanceChapter(metaclass=Autostatic):
             g.action_card_discard.add(p.hand[1:])
             p.hand = p.hand[:1]
 
-        assert g.chapter == 1
-        assert g.initiative == player1
+        got_chapter = g.chapter
+        assert got_chapter == 1
 
-        _lead(g, player1, ADMIN[4])
-        _surpass(g, player2, ADMIN[5])
-        _copy(g, player3, CONST[6])
-        _copy(g, player4, ADMIN[7])
+        got_initiative = g.initiative
+        assert got_initiative == player1
 
-        assert g.chapter == 2
-        assert g.initiative == player2
+        g.lead(player1, ADMIN[4])
+        g.end_prelude()
+        g.end_pips()
+
+        g.surpass(player2, ADMIN[5])
+        g.end_prelude()
+        g.end_pips()
+
+        g.copy(player3, CONST[6])
+        g.end_prelude()
+        g.end_pips()
+
+        g.copy(player4, ADMIN[7])
+        g.end_prelude()
+        g.end_pips()
+
+        got_chapter = g.chapter
+        assert got_chapter == 2
+
+        got_initiative = g.initiative
+        assert got_initiative == player2
 
 
 class TestWinner(metaclass=Autostatic):
@@ -377,3 +378,37 @@ class TestScoring(metaclass=Autostatic):
 
             assert player1 not in ranking
             assert player2 in ranking
+
+
+class TestInfluence(metaclass=Autostatic):
+    def test_influence(g: Game, color: Color, court_slot0_card_name: str) -> None:
+        agents = g.court.agents_on_card(court_slot0_card_name)
+        assert agents[color] == 0
+        g.influence(color, court_slot0_card_name)
+        assert agents[color] == 1
+
+
+class TestSecure(metaclass=Autostatic):
+    def test_secure_guild_card(g: Game, color: Color, guild_card_in_court_name: str) -> None:
+        card = g.court.card(guild_card_in_court_name)
+        g.influence(color, guild_card_in_court_name)
+        g.secure(color, guild_card_in_court_name)
+        assert card in g.players[color].tableau
+        assert len(g.court.discard_pile) == 0
+
+    def test_secure_vox_card(g: Game, color: Color, vox_card_in_court_name: str) -> None:
+        card = g.court.card(vox_card_in_court_name)
+        g.influence(color, vox_card_in_court_name)
+        g.secure(color, vox_card_in_court_name)
+        assert card not in g.players[color].tableau
+        assert g.court.discard_pile.top_card == card
+
+
+class TestReturnPiece(metaclass=Autostatic):
+    def test_return_player_piece(g: Game, color: Color) -> None:
+        p = g.players[color]
+        initial_ship_supply = p.ships
+        g.return_piece(Ship(color))
+        assert p.ships == initial_ship_supply + 1
+
+    # TODO(cleanup): Create a new UnreturnablePiece subclass of Piece to test the error branch.

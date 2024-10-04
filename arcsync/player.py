@@ -8,7 +8,9 @@ from arcsync.ambition import Ambition
 from arcsync.color import Color
 from arcsync.courtcard import GuildCard
 from arcsync.courtcard import Suit as GuildCardSuit
-from arcsync.piece import DamageablePiece
+from arcsync.event import CardRemovedFromCourtEvent
+from arcsync.eventbus import EventBus
+from arcsync.piece import Agent, City, DamageablePiece, PlayerPiece, Ship, Starport
 from arcsync.resource import Resource
 from arcsync.util import DunderDictReprMixin, assert_never
 
@@ -44,14 +46,16 @@ class Player(DunderDictReprMixin):
     starports: int
     cities: int
 
-    # trophies
-    # captives
+    trophies: list[PlayerPiece]
+    captives: list[PlayerPiece]
 
     # TODO(campaign): Favors
     # TODO(campaign): Titles
     # TODO(L&L): Leader/Fate
 
-    def __init__(self, color: Color) -> None:
+    _event_bus: Final[EventBus]
+
+    def __init__(self, color: Color, event_bus: EventBus | None = None) -> None:
         self.color = color
 
         self.hand = []
@@ -71,6 +75,51 @@ class Player(DunderDictReprMixin):
         self.agents = 10
         self.starports = 5
         self.cities = 5
+
+        # For convenience, if you are unit testing one component and don't need an event bus, you
+        # can skip it. One will be created, but it won't be very useful because it won't be linked
+        # to anything else.
+        if event_bus is None:
+            event_bus = EventBus()
+        self._event_bus = event_bus
+
+        def handle_card_removed_from_court_event(e: CardRemovedFromCourtEvent) -> None:
+            if self.color not in e.agents:
+                return
+            for _ in range(e.agents[self.color]):
+                # TODO(cleanup): Creating an Agent to return it is jank.
+                self.receive_returned_piece(Agent(self.color))
+
+        # TODO(cleanup): is there a way to subscribe to events and create the callback inline?
+        self._event_bus.subscribe(CardRemovedFromCourtEvent, handle_card_removed_from_court_event)
+
+    def acquire_card(self, card: GuildCard) -> None:
+        self.tableau.append(card)
+
+    def capture(self, piece: PlayerPiece) -> None:
+        if piece.loyalty == self.color:
+            raise ValueError(
+                f"Cannot capture returned piece of loyalty {piece.loyalty} because it matches my"
+                f" color ({self.color})."
+            )
+        self.captives.append(piece)
+
+    def receive_returned_piece(self, piece: PlayerPiece) -> None:
+        if piece.loyalty != self.color:
+            raise ValueError(
+                f"Cannot receive returned piece of loyalty {piece.loyalty} because it does not"
+                f" match my color ({self.color})."
+            )
+        match piece:
+            case Ship():
+                self.ships += 1
+            case Agent():
+                self.agents += 1
+            case Starport():
+                self.starports += 1
+            case City():
+                self.cities += 1
+                # TODO(base): Handle resource rearrangement.
 
     def count_for_ambition(self, ambition: Ambition) -> int:
         match ambition:
@@ -131,5 +180,5 @@ class Player(DunderDictReprMixin):
         return covered[slot_index]
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     pass

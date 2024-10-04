@@ -85,5 +85,5 @@ class DunderDictReprTruncatedSequencesMixin(object):
         return f"{type(self).__name__}({item_string})"
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     pass

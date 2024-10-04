@@ -83,3 +83,18 @@ def resource() -> Resource:
 @fixture
 def ambition() -> Ambition:
     return defaults.ambition
+
+
+@fixture
+def court_slot0_card_name() -> str:
+    return defaults.court_slot0_card_name
+
+
+@fixture
+def guild_card_in_court_name() -> str:
+    return defaults.guild_card_in_court_name
+
+
+@fixture
+def vox_card_in_court_name() -> str:
+    return defaults.vox_card_in_court_name

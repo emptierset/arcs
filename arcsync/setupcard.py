@@ -120,5 +120,5 @@ four_player_setup_cards: Final[Sequence[FourPlayerSetupCard]] = [
     # TODO(base): Mix Up 3
 ]
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     pass

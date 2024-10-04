@@ -4,6 +4,8 @@ from abc import ABCMeta
 
 from arcsync.card import Card
 
+if typing.TYPE_CHECKING:  # pragma: no cover
+    from arcsync.player import Player
 
 
 class CourtCard(Card, metaclass=ABCMeta):
@@ -55,5 +57,5 @@ class VoxCard(CourtCard):
         super().__init__(name, id_, text)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     pass

@@ -8,7 +8,7 @@ from typing import Final, NewType
 from arcsync.piece import Piece
 from arcsync.util import DunderDictReprTruncatedSequencesMixin
 
-if typing.TYPE_CHECKING:
+if typing.TYPE_CHECKING:  # pragma: no cover
     from arcsync.setupcard import SetupCard
 
 
@@ -308,5 +308,5 @@ class Reach(object):
             Reach.add_edge(s, adjacent_system)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     pass

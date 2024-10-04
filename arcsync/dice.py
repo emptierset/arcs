@@ -85,5 +85,5 @@ def roll(d: DicePool | Die) -> RollResult:
         raise TypeError
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     pass

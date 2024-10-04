@@ -40,5 +40,5 @@ class EventBus(object):
             callback(event)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     pass

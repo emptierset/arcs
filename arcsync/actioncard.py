@@ -148,5 +148,5 @@ basic_4p_cards: Final[list[ActionCard]] = [
     basic_cards[Suit.AGGRESSION][7],
 ]
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     pass
