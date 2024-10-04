@@ -17,9 +17,11 @@ CardT = TypeVar("CardT", bound=Card)
 class Deck(Generic[CardT]):
     _cards: collections.deque[CardT]
 
-    def __init__(self, cards: Collection[CardT], seed: int | None = None) -> None:
+    def __init__(self, cards: Collection[CardT] | None = None, seed: int | None = None) -> None:
         if seed is not None:
             random.seed(seed)
+        if cards is None:
+            cards = []
         self._cards = collections.deque(cards)
 
     def __len__(self) -> int:
@@ -65,6 +67,7 @@ class Deck(Generic[CardT]):
     def put_on_bottom(self, card: CardT) -> None:
         self._cards.append(card)
 
+    # TODO(cleanup): rename to draw_bottom.
     @typing.overload
     def draw_from_bottom(self) -> CardT: ...
 
